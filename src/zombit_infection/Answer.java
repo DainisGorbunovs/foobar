@@ -43,6 +43,6 @@ package zombit_infection;
 public class Answer {
     public static int[][] answer(int[][] population, int x, int y, int strength) {
         // Your code goes here.
-        return 0;
+        return new int[][] {{0,0,0}, {0,0,0}, {0,0,0}};
     }
 }

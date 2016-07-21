@@ -5,8 +5,12 @@ import org.junit.Test;
 
 public class AnswerTest {
     @Test
-    public void testCaseTest() {
+    public void testCaseATest() {
         Assert.assertEquals(Answer.answer(0), 2);
+    }
+
+    @Test
+    public void testCaseBTest() {
         Assert.assertEquals(Answer.answer(42), 4);
     }
 }
