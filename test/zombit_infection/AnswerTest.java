@@ -14,7 +14,7 @@ public class AnswerTest {
         int x = 0;
         int y = 0;
         int strength = 2;
-        Assert.assertArrayEquals(new Answer().answer(population, x, y, strength), new int[][]{
+        Assert.assertArrayEquals(Answer.answer(population, x, y, strength), new int[][]{
                 {-1, -1, 3},
                 {-1,  3, 4},
                 { 3,  2, 1}
@@ -33,7 +33,7 @@ public class AnswerTest {
         int x = 2;
         int y = 1;
         int strength = 5;
-        Assert.assertArrayEquals(new Answer().answer(population, x, y, strength), new int[][]{
+        Assert.assertArrayEquals(Answer.answer(population, x, y, strength), new int[][]{
                 { 6,  7, -1,  7,  6},
                 { 6, -1, -1, -1,  7},
                 {-1, -1, -1, -1, 10},

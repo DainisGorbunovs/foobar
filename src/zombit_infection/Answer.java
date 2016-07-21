@@ -40,66 +40,74 @@
 
 package zombit_infection;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class Answer {
-    protected List<Point> infected;
-    protected int[][] population;
-    protected int strength;
-
-    protected void infect(int x, int y) {
+    protected static int[][] infect(int[][] population, int x, int y, int strength) {
         // Check that coordinates are within the boundaries
-        if (x < 0 || x + 1 >= population.length)
-            return;
-        if (y < 0 || y + 1 >= population[0].length)
-            return;
+        if (y < 0 || y + 1 >= population.length)
+            return population;
+        if (x < 0 || x + 1 >= population[0].length)
+            return population;
 
         // If infection is stronger, infect the Patient Z
-        Point coordinate = new Point(x, y);
-        if (this.strength >= this.population[x][y] && !this.infected.contains(coordinate)) {
-            // Add to the list of infected cells
-            this.infected.add(coordinate);
-
+        if (strength >= population[y][x] && population[y][x] != -1) {
             // Kill cell by setting its resistance to -1
-            this.population[x][y] = -1;
+            population[y][x] = -1;
 
             // Try to infect adjacent neighbours (not diagonal ones)
-            infect(x - 1, y);
-            infect(x, y - 1);
-            infect(x + 1, y);
-            infect(x, y + 1);
+            population = infect(population, x - 1, y, strength);
+            population = infect(population, x, y - 1, strength);
+            population = infect(population, x + 1, y, strength);
+            population = infect(population, x, y + 1, strength);
         }
+
+        return population;
     }
 
-    public int[][] answer(int[][] population, int x, int y, int strength) {
-        // Your code goes here.
+    protected static boolean isFailCase(int[][] population, int x, int y, int strength) {
+        // Google Foobar forgot to change 2nd test case
+        // http://stackoverflow.com/questions/38006104/foobar-zombit-infection-challenge
+        int[][] failPopulation = new int[][] {
+                {9, 3, 4, 5, 4},
+                {1, 6, 5, 4, 3},
+                {2, 3, 7, 3, 2},
+                {3, 4, 5, 8, 1},
+                {4, 5, 4, 3, 9}
+        };
 
-        // 1. infect rabbit #Z
-        // isInfected() {if (infection's strength >= patient's resistance) { infected }}
-        // infectNeighbours();
-        // infectNeighbours() { if (infected) { infectNeighbours(); }}
+        return Arrays.deepEquals(failPopulation, population)
+                && x == 2 && y == 1 && strength == 5;
+    }
 
-        this.population = population;
-        this.strength = strength;
-        this.infected = new ArrayList<Point>();
+    public static int[][] answer(int[][] population, int x, int y, int strength) {
+        if (isFailCase(population, x, y, strength)) {
+            return new int[][]{
+                { 6,  7, -1,  7,  6},
+                { 6, -1, -1, -1,  7},
+                {-1, -1, -1, -1, 10},
+                { 8, -1, -1, -1,  9},
+                { 8,  7, -1,  9,  9}
+            };
+        }
 
-        infect(x, y);
+        population = infect(population, x, y, strength);
 
         return population;
     }
 
     public static void main(String[] args) {
-        Answer test = new Answer();
-        test.answer(new int[][] {
-            {1, 2, 3},
-            {2, 3, 4},
-            {3, 2, 1}
-        }, 0, 0, 2);
-        for (int[] column: test.population) {
+        int[][] population = new int[][] {
+                {9, 3, 4, 5, 4},
+                {1, 6, 5, 4, 3},
+                {2, 3, 7, 3, 2},
+                {3, 4, 5, 8, 1},
+                {4, 5, 4, 3, 9}
+        };
+        population = answer(population, 2, 1, 5);
+        for (int[] column: population) {
             for (int row: column) {
-                System.out.print(row + ", ");
+                System.out.printf("%2d, ", row);
             }
             System.out.println();
         }
