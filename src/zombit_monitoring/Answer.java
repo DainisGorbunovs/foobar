@@ -55,14 +55,12 @@ public class Answer {
     public static int answer(int[][] intervals) {
         intervals = mergeIntervals(intervals);
 
-        for (int[] column : intervals) {
-            for (int row : column) {
-                System.out.print(row + ", ");
-            }
-            System.out.println();
+        int totalTime = 0;
+        for (int[] interval : intervals) {
+            totalTime += interval[end] - interval[start];
         }
 
-        return 0;
+        return totalTime;
     }
 
     public static void main(String[] args) {
@@ -74,6 +72,7 @@ public class Answer {
                 {13, 20}
         };
 
-        answer(intervals);
+        System.out.println("intervals = " + answer(intervals));
+
     }
 }
