@@ -41,6 +41,7 @@
 package zombit_infection;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Answer {
@@ -48,9 +49,27 @@ public class Answer {
     protected int[][] population;
     protected int strength;
 
-    protected boolean infect(int x, int y) {
-        if (this.strength >= this.population[x][y]) {
-            this.infected.add(new Point(x, y));
+    protected void infect(int x, int y) {
+        // Check that coordinates are within the boundaries
+        if (x < 0 || x + 1 >= population.length)
+            return;
+        if (y < 0 || y + 1 >= population[0].length)
+            return;
+
+        // If infection is stronger, infect the Patient Z
+        Point coordinate = new Point(x, y);
+        if (this.strength >= this.population[x][y] && !this.infected.contains(coordinate)) {
+            // Add to the list of infected cells
+            this.infected.add(coordinate);
+
+            // Kill cell by setting its resistance to -1
+            this.population[x][y] = -1;
+
+            // Try to infect adjacent neighbours (not diagonal ones)
+            infect(x - 1, y);
+            infect(x, y - 1);
+            infect(x + 1, y);
+            infect(x, y + 1);
         }
     }
 
@@ -64,9 +83,25 @@ public class Answer {
 
         this.population = population;
         this.strength = strength;
+        this.infected = new ArrayList<Point>();
 
         infect(x, y);
 
         return population;
+    }
+
+    public static void main(String[] args) {
+        Answer test = new Answer();
+        test.answer(new int[][] {
+            {1, 2, 3},
+            {2, 3, 4},
+            {3, 2, 1}
+        }, 0, 0, 2);
+        for (int[] column: test.population) {
+            for (int row: column) {
+                System.out.print(row + ", ");
+            }
+            System.out.println();
+        }
     }
 }
