@@ -19,7 +19,7 @@ When water is poured over the top at all places and allowed to runoff, it will r
 ...X...
 .XOX...
 .XOXOOX
-.XXXOXXg
+.XXXOXX
 XXXXXXX
 1425123
 

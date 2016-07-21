@@ -17,7 +17,7 @@
     .X.X...
     .X.X..X
     .XXX.XX
-    XXXXXXX
+    XXXXXXXg
     1425123
 
     When water is poured over the top at all places and allowed to runoff, it will remain trapped at the 'O' locations:
@@ -25,7 +25,7 @@
     ...X...
     .XOX...
     .XOXOOX
-    .XXXOXXg
+    .XXXOXX
     XXXXXXX
     1425123
 
@@ -43,6 +43,8 @@ package when_it_rains_it_pours;
 
 public class Answer {
     public static int answer(int[] heights) {
+        // Water is trapped between number A and C, where there are smaller numbers B < A and B < C
+        // Runs off the sides, so first and last numbers do not contain water
         return 0;
     }
     
