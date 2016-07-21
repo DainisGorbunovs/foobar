@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class AnswerTest {
     @Test
-    public void testCaseATest() {
+    public void caseATest() {
         int[][] population = new int[][] {
                 {1, 2, 3},
                 {2, 3, 4},
@@ -22,7 +22,7 @@ public class AnswerTest {
     }
 
     @Test
-    public void testCaseBTest() {
+    public void caseBTest() {
         int[][] population = new int[][] {
                 {9, 3, 4, 5, 4},
                 {1, 6, 5, 4, 3},
