@@ -31,7 +31,7 @@
     rabbit has a Resistance greater than the infection's Strength.)
 
     You will write a function answer(population, x, y, strength), which outputs a copy of the input array
-    representingthe state of the population at the end of the simulation, in which any infected cells value has
+    representing the state of the population at the end of the simulation, in which any infected cells value has
     been replaced with -1.
     The Strength and Resistance values will be between 0 and 10000. The population grid will be at least 1x1
     and no larger than 25x25. The x and y values will be valid indices in the population arrays, with numbering
@@ -40,9 +40,33 @@
 
 package zombit_infection;
 
+import java.awt.*;
+import java.util.List;
+
 public class Answer {
-    public static int[][] answer(int[][] population, int x, int y, int strength) {
+    protected List<Point> infected;
+    protected int[][] population;
+    protected int strength;
+
+    protected boolean infect(int x, int y) {
+        if (this.strength >= this.population[x][y]) {
+            this.infected.add(new Point(x, y));
+        }
+    }
+
+    public int[][] answer(int[][] population, int x, int y, int strength) {
         // Your code goes here.
-        return new int[][] {{0,0,0}, {0,0,0}, {0,0,0}};
+
+        // 1. infect rabbit #Z
+        // isInfected() {if (infection's strength >= patient's resistance) { infected }}
+        // infectNeighbours();
+        // infectNeighbours() { if (infected) { infectNeighbours(); }}
+
+        this.population = population;
+        this.strength = strength;
+
+        infect(x, y);
+
+        return population;
     }
 }
