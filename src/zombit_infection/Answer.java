@@ -43,7 +43,7 @@ package zombit_infection;
 import java.util.Arrays;
 
 public class Answer {
-    protected static int[][] infect(int[][] population, int x, int y, int strength) {
+    private static int[][] infect(int[][] population, int x, int y, int strength) {
         // Check that coordinates are within the boundaries
         if (y < 0 || y >= population.length)
             return population;
@@ -65,7 +65,7 @@ public class Answer {
         return population;
     }
 
-    protected static boolean isFailCase(int[][] population, int x, int y, int strength) {
+    private static boolean isFailCase(int[][] population, int x, int y, int strength) {
         // Google Foobar forgot to change 2nd test case
         // http://stackoverflow.com/questions/38006104/foobar-zombit-infection-challenge
         int[][] failPopulation = new int[][] {

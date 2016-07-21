@@ -16,14 +16,14 @@
 package backward_and_forward;
 
 public class Answer {
-    public static boolean isPalindrome(int number) {
+    private static boolean isPalindrome(int number) {
         String strNumber = String.valueOf(number);
         String reverseNumber = new StringBuffer(strNumber).reverse().toString();
 
         return strNumber.equals(reverseNumber);
     }
 
-    public static int convertToBase(int number, int base) {
+    private static int convertToBase(int number, int base) {
         String converted = "";
         int remainder = 0;
         while (number > 0) {
