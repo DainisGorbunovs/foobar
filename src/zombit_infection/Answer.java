@@ -45,9 +45,9 @@ import java.util.Arrays;
 public class Answer {
     protected static int[][] infect(int[][] population, int x, int y, int strength) {
         // Check that coordinates are within the boundaries
-        if (y < 0 || y + 1 >= population.length)
+        if (y < 0 || y >= population.length)
             return population;
-        if (x < 0 || x + 1 >= population[0].length)
+        if (x < 0 || x >= population[0].length)
             return population;
 
         // If infection is stronger, infect the Patient Z
