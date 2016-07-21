@@ -19,8 +19,61 @@
 
 package zombit_monitoring;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class Answer {
+    private static final int start = 0;
+    private static final int end   = 1;
+
+    private static int[][] mergeIntervals(int[][] intervals) {
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] first, int[] second) {
+                return first[start] - second[end];
+            }
+        });
+
+        int lastIndex = 0;
+        for (int index = 0; index < intervals.length; index++) {
+            if (lastIndex != 0 && intervals[lastIndex-1][start] <= intervals[lastIndex][end]) {
+                intervals[lastIndex-1][end]   = Math.max(intervals[lastIndex-1][end], intervals[index][end]);
+                intervals[lastIndex-1][start] = Math.min(intervals[lastIndex-1][start], intervals[index][start]);
+                lastIndex--;
+            } else {
+                intervals[lastIndex] = intervals[index];
+            }
+
+            lastIndex++;
+        }
+
+        intervals = Arrays.copyOfRange(intervals, 0, lastIndex);
+
+        return intervals;
+    }
+
     public static int answer(int[][] intervals) {
+        intervals = mergeIntervals(intervals);
+
+        for (int[] column : intervals) {
+            for (int row : column) {
+                System.out.print(row + ", ");
+            }
+            System.out.println();
+        }
+
         return 0;
+    }
+
+    public static void main(String[] args) {
+        int[][] intervals = new int[][] {
+                {10, 14},
+                { 4, 18},
+                {19, 20},
+                {19, 20},
+                {13, 20}
+        };
+
+        answer(intervals);
     }
 }
