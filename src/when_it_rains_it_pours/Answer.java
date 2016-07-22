@@ -42,58 +42,32 @@
 package when_it_rains_it_pours;
 
 public class Answer {
-    private static final int start = 0;
-    private static final int end   = 1;
+    private static final int left  = 0;
+    private static final int right = 1;
 
     public static int answer(int[] heights) {
         // Water is trapped between number A and C, where there are smaller numbers B < A and B < C
         // Runs off the sides, so first and last numbers do not contain water
-        int[] peakIndex = new int[] {0, 0};
+        int[] max = new int[] {0, 0};
+        int[] index = new int[] {0, heights.length - 1};
         int droplets = 0;
-        int peakType = start;
 
-        System.out.println("Heights length: " + heights.length);
+        // Go from both sides
+        while (index[left] < index[right]) {
+            // Keep track of maximum encountered height from left and right side
+            max[left]  = Math.max(max[left], heights[index[left]]);
+            max[right] = Math.max(max[right], heights[index[right]]);
 
-        for (int index = 1; index < heights.length; index++) {
-            if (peakType == start)
-                System.out.print("[start] ");
-            else
-                System.out.print("[end] ");
-
-            System.out.println("Testing height: " + heights[index] + ", index: " + index);
-            if ((heights[index] > heights[peakIndex[peakType]] || peakIndex[start] == peakIndex[end])
-                    && index != heights.length-1) {
-                peakIndex[peakType] = index;
-            } else if (heights[index] < heights[peakIndex[peakType]] || index == heights.length-1) {
-                if (index == heights.length-1) {
-                    if (heights[heights.length-1] > heights[index-1]) {
-                        peakIndex[peakType] = heights.length - 1;
-                        System.out.println("Peak index set to last, height: " + heights[peakIndex[peakType]]);
-                    }
-                }
-                if (peakType == start) {
-                    System.out.print("start ");
-                } else {
-                    System.out.print("end ");
-                }
-                System.out.println("peakindex value = " + heights[peakIndex[peakType]]);
-
-                if (peakType == end) {
-                    int minHeight = Math.min(heights[peakIndex[start]], heights[peakIndex[end]]);
-                    for (int dropIndex = peakIndex[start] + 1; dropIndex < peakIndex[end]; dropIndex++) {
-                        droplets += minHeight - heights[dropIndex];
-                        System.out.println("Added droplets += " + (minHeight - heights[dropIndex]));
-                    }
-                    peakIndex[start] = peakIndex[end];
-                    System.out.println("Switched start peak's height to: " + heights[peakIndex[start]]);
-                }
-
-                // switch peak type
-                if (peakType == start)
-                    peakType ^= 1;
-
+            // If right side's max height is greater than left side's
+            // Count droplets from the side with a lower max height,
+            // Then move the side's index closer to the other index
+            if (max[left] < max[right]) {
+                droplets += max[left] - heights[index[left]];
+                index[left]++;
+            } else {
+                droplets += max[right] - heights[index[right]];
+                index[right]--;
             }
-            System.out.println();
         }
         return droplets;
     }
