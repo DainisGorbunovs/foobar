@@ -13,7 +13,7 @@ public class AnswerTest {
                 {2, 1, 1}
         };
 
-        Assert.assertEquals(Answer.answer(food, grid), 0);
+        Assert.assertEquals(0, Answer.answer(food, grid));
     }
 
     @Test
@@ -25,6 +25,6 @@ public class AnswerTest {
                 {2, 1, 1}
         };
 
-        Assert.assertEquals(Answer.answer(food, grid), 1);
+        Assert.assertEquals(1, Answer.answer(food, grid));
     }
 }

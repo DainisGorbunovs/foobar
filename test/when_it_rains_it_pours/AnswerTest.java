@@ -8,13 +8,13 @@ public class AnswerTest {
     public void caseATest() {
         int[] heights = new int[] {1, 4, 2, 5, 1, 2, 3};
 
-        Assert.assertEquals(Answer.answer(heights), 5);
+        Assert.assertEquals(5, Answer.answer(heights));
     }
 
     @Test
     public void caseBTest() {
         int[] heights = new int[] {1, 2, 3, 2, 1};
 
-        Assert.assertEquals(Answer.answer(heights), 0);
+        Assert.assertEquals(0, Answer.answer(heights));
     }
 }

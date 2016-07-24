@@ -6,11 +6,11 @@ import org.junit.Test;
 public class AnswerTest {
     @Test
     public void caseATest() {
-        Assert.assertEquals(Answer.answer(0), 2);
+        Assert.assertEquals(2, Answer.answer(0));
     }
 
     @Test
     public void caseBTest() {
-        Assert.assertEquals(Answer.answer(42), 4);
+        Assert.assertEquals(4, Answer.answer(42));
     }
 }

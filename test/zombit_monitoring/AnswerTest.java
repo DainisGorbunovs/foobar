@@ -10,7 +10,7 @@ public class AnswerTest {
                 {1, 3},
                 {3, 6}
         };
-        Assert.assertEquals(Answer.answer(intervals), 5);
+        Assert.assertEquals(5, Answer.answer(intervals));
     }
 
     @Test
@@ -22,6 +22,6 @@ public class AnswerTest {
                 {19, 20},
                 {13, 20}
         };
-        Assert.assertEquals(Answer.answer(intervals), 16);
+        Assert.assertEquals(16, Answer.answer(intervals));
     }
 }
