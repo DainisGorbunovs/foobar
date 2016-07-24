@@ -37,8 +37,61 @@
 package save_beta_rabbit;
 
 public class Answer {
+    private static final int right = 0;
+    private static final int down  = 1;
+
+    private static int step(int food, int[][] grid, int x, int y) {
+        // If outside boundaries, then this route does not exist
+        if (x < 0 || y < 0 || x >= grid.length || y >= grid.length || food < 0) {
+            System.out.println();
+            return -1; // non-existent route
+        }
+
+        // After entering current square, grid will take the food a bit
+        food = food - grid[x][y];
+        if (x == grid.length-1 && y == grid.length-1) {
+            System.out.println("Returning one of the answers: " + food);
+            return food;
+        }
+
+        System.out.println("x, y = " + x +  "," +  y + ", food = " + food + ", zombie needs: " + grid[x][y]);
+
+        // If not at the end and food is lower than required, then foodLeft = -1
+        int minFoodNeeded = 2*(grid.length-1) - x - y;
+        if (food < minFoodNeeded) {
+            return -1;
+        }
+
+        // Keep values of food left
+        int[] foodSteps = {0, 0};
+
+        // Find how much food is left if choose step #right or #down
+        System.out.print("Right > ");
+        foodSteps[right] = step(food, grid, x, y+1);
+
+        System.out.print("Down > ");
+        foodSteps[down] = step(food, grid, x+1, y);
+
+        if (foodSteps[down] == 0) {
+            System.out.println("footsteps down is 0" + ", x, y = " + x +  "," +  y);
+            System.out.println("footsteps right is " + foodSteps[right]);
+        }
+        // Food left is the least posiitve
+        int foodLeft = -1;
+        if ((foodSteps[down] < foodSteps[right] && foodSteps[down] >= 0)
+                || (foodSteps[right] < 0 && foodSteps[down] >= 0)) {
+            foodLeft = foodSteps[down];
+        } else if ((foodSteps[right] < foodSteps[down] && foodSteps[right] >= 0)
+                || (foodSteps[down] < 0 && foodSteps[right] >= 0)) {
+            foodLeft = foodSteps[right];
+        }
+
+        // Return the amount of food left after making the step (if last step, then the final answer)
+        return foodLeft;
+    }
+
     public static int answer(int food, int[][] grid) {
-        return 0;
+        return step(food, grid, 0, 0);
     }
 
     public static void main(String[] args) {
@@ -47,6 +100,7 @@ public class Answer {
                 {1, 1, 3},
                 {2, 1, 1}
         };
+
         int food = 7;
         System.out.println("answer(food, grid) = " + answer(food, grid));
     }
