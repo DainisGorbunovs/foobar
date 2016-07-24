@@ -36,72 +36,62 @@
 
 package save_beta_rabbit;
 
+import java.util.*;
+
 public class Answer {
-    private static final int right = 0;
-    private static final int down  = 1;
-
-    private static int step(int food, int[][] grid, int x, int y) {
-        // If outside boundaries, then this route does not exist
-        if (x < 0 || y < 0 || x >= grid.length || y >= grid.length || food < 0) {
-            System.out.println();
-            return -1; // non-existent route
-        }
-
-        // After entering current square, grid will take the food a bit
-        food = food - grid[x][y];
-        if (x == grid.length-1 && y == grid.length-1) {
-            System.out.println("Returning one of the answers: " + food);
-            return food;
-        }
-
-        System.out.println("x, y = " + x +  "," +  y + ", food = " + food + ", zombie needs: " + grid[x][y]);
-
-        // If not at the end and food is lower than required, then foodLeft = -1
-        int minFoodNeeded = 2*(grid.length-1) - x - y;
-        if (food < minFoodNeeded) {
-            return -1;
-        }
-
-        // Keep values of food left
-        int[] foodSteps = {0, 0};
-
-        // Find how much food is left if choose step #right or #down
-        System.out.print("Right > ");
-        foodSteps[right] = step(food, grid, x, y+1);
-
-        System.out.print("Down > ");
-        foodSteps[down] = step(food, grid, x+1, y);
-
-        if (foodSteps[down] == 0) {
-            System.out.println("footsteps down is 0" + ", x, y = " + x +  "," +  y);
-            System.out.println("footsteps right is " + foodSteps[right]);
-        }
-        // Food left is the least posiitve
-        int foodLeft = -1;
-        if ((foodSteps[down] < foodSteps[right] && foodSteps[down] >= 0)
-                || (foodSteps[right] < 0 && foodSteps[down] >= 0)) {
-            foodLeft = foodSteps[down];
-        } else if ((foodSteps[right] < foodSteps[down] && foodSteps[right] >= 0)
-                || (foodSteps[down] < 0 && foodSteps[right] >= 0)) {
-            foodLeft = foodSteps[right];
-        }
-
-        // Return the amount of food left after making the step (if last step, then the final answer)
-        return foodLeft;
-    }
-
+//    http://codereview.stackexchange.com/questions/91317/google-foobar-challenge-save-beta-rabbit-in-python
     public static int answer(int food, int[][] grid) {
-        return step(food, grid, 0, 0);
+        int N = grid.length;
+
+        List<Integer>[][] ans_grid = new ArrayList[N][N];
+
+        for (int row = 0; row < N; ++row) {
+            for (int col = 0; col < N; ++col) {
+                ans_grid[row][col] = new ArrayList<Integer>();
+                int val = grid[row][col];
+                if (row == 0 && col == 0) {
+                    ans_grid[0][0].add(grid[0][0]);
+                }
+
+                if (row != 0) {
+                    for (Integer x : ans_grid[row-1][col]) {
+                        if (val + x <= food && !ans_grid[row][col].contains(val + x)) {
+                            ans_grid[row][col].add(val + x);
+                        }
+                    }
+                }
+                if (col != 0) {
+                    for (Integer x : ans_grid[row][col-1]) {
+                        if (val + x <= food && !ans_grid[row][col].contains(val + x)) {
+                            ans_grid[row][col].add(val + x);
+                        }
+                    }
+                }
+            }
+        }
+
+        List<Integer> all_ans = ans_grid[N-1][N-1];
+        Collections.sort(all_ans);
+        Collections.reverse(all_ans);
+
+        for (Integer el : all_ans) {
+            if (el <= food) {
+                return food - el;
+            }
+        }
+
+        return -1;
     }
 
     public static void main(String[] args) {
-        int[][] grid = new int[][] {
-                {0, 2, 5},
-                {1, 1, 3},
-                {2, 1, 1}
-        };
+        int[][] grid = new int[20][20];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                grid[i][j] = (int)(Math.random()*10);
+            }
+        }
 
-        int food = 7;
+        int food = grid.length*15;
         System.out.println("answer(food, grid) = " + answer(food, grid));
     }
 }
