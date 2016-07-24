@@ -136,8 +136,6 @@ public class Answer {
         return response;
     }
 
-
-
     public static void main(String[] args) {
 //        String document = "many google employees can program";
 //        String[] searchTerms = {"google", "program"};
@@ -146,8 +144,8 @@ public class Answer {
         // combinations: [1-4]
         // shortest combination: [1-4] => "google employees can program"
 
-        String document = "a b c d a";
-        String[] searchTerms = {"a", "c", "d"};
+//        String document = "a b c d a";
+//        String[] searchTerms = {"a", "c", "d"};
         // a: 0, 4
         // c: 2
         // d: 3
@@ -161,6 +159,14 @@ public class Answer {
         // combinations: [2-0], [2-5], [3-0], [3-5]
         // shortest combinations: [0-2] => "world there hello", [3-5] => "hello where world"
         // shortest combination: [0-2] => "world there hello"
+
+        String document = "Lorem Ipsum is simply dummy text of the printing and typesetting industry Lorem Ipsum " +
+                "has been the industrys standard dummy text ever since the 1500s when an unknown printer took a " +
+                "of type and scrambled it to make a type specimen book It has survived not only five centuries but " +
+                "also the leap into electronic typesetting remaining essentially unchanged It was popularised in " +
+                "the 1960s with the release of Letraset sheets containing Lorem Ipsum passages and more recently " +
+                "with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum";
+        String[] searchTerms = {"the", "industry", "Ipsum"};
 
         String response = answer(document, searchTerms);
         System.out.println("response = " + response);
