@@ -41,9 +41,7 @@
 
 package spy_snippets;
 
-import com.sun.xml.internal.ws.util.StringUtils;
-
-import java.awt.*;
+import java.awt.Point;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,58 +49,46 @@ import java.util.List;
 import java.util.Map;
 
 public class Answer {
-    private static Point test(Map<String, List<Integer>> indices, String[] searchTerms, int termIndex, int start, int end) {
+    private static Point findShortestIndices(Map<String, List<Integer>> indices,
+                                             String[] searchTerms, int termIndex, int start, int end) {
         // select one index from each search term
-        // find beginning and ending indices for the search terms
-        // return them
-        // choose another index, find beginning and ending indices for search terms
+        // initially it is beginning and ending index
+        // go deeper in the search terms until find final indices
+        // keep updating beginning and ending index
+        // out of all solutions return the solution with least number of indices
+        // return it
 
-//        int begin = 0;
-//        int end = 0;
-//        foreach
-//          test(begin,end, termIndex)
-
-//        ArrayList begin, end
-//                return final begin and end
-//        test(indices, searchTerms, 1, begin, end)
-//        a: [0,3] = test(indices, searchTerms, 1, 0, 0)
-//           [2,4] = test(indices, searchTerms, 1, 4, 4)
-//           if (termIndex==0):
-//             from the arraylist find first least and return [2,4]
-//        ...
-//        c: test(indices, searchTerms, 2, 0, 2)
-//           test(indices, searchTerms, 2, 0, 5)
-//           iterate through arraylist of results and return the first least,
-//           return [0, 3]
-//
-//           recursively test(indices, searchTerms, 2, 2, 4)
-//           recursively test(indices, searchTerms, 2, 4, 5)
-//           return [2, 4]
-//        d: return [0, 3]
-//           return [0, 5]
-//           return [2, 4]
-//           return [2, 5]
+        // Sample thinking:
+        //test(indices, searchTerms, 1, begin, end)
+        //a: [0,3] = test(indices, searchTerms, 1, 0, 0)
+        //   [2,4] = test(indices, searchTerms, 1, 4, 4)
+        //   if (termIndex==0):
+        //     from the arraylist find first least and return [2,4]
+        //...
+        //c: test(indices, searchTerms, 2, 0, 2)
+        //   test(indices, searchTerms, 2, 0, 5)
+        //   iterate through arraylist of results and return the first least,
+        //   return [0, 3]
+        //
+        //   recursively test(indices, searchTerms, 2, 2, 4)
+        //   recursively test(indices, searchTerms, 2, 4, 5)
+        //   return [2, 4]
+        //d: return [0, 3]
+        //   return [0, 5]
+        //   return [2, 4]
+        //   return [2, 5]
 
         List<Point> intervals = new ArrayList<Point>();
         for (Integer index : indices.get(searchTerms[termIndex])) {
-            System.out.printf("Checking %d in %s\n", index, searchTerms[termIndex]);
             if (termIndex != searchTerms.length-1) {
-                int newStart = start;
-                int newEnd = end;
-                if (index < start || start < 0) {
-                    newStart = index;
-                }
-                if (index > end || end < 0){
-                    newEnd = index;
-                }
-                System.out.printf("[%d] Going to check with [start-end]: [%d:%d]\n", index, newStart, newEnd);
-                intervals.add(test(indices, searchTerms, termIndex + 1, newStart, newEnd));
+                int minIndex = (index < start || start < 0) ? index : start;
+                int maxIndex = (index > end || end < 0) ? index : end;
+
+                intervals.add(findShortestIndices(indices, searchTerms, termIndex + 1, minIndex, maxIndex));
             } else {
                 int minIndex = (start < index) ? ((start >= 0) ? start : index) : index;
                 int maxIndex = (end > index) ? end : index;
-                Point total = new Point(minIndex, maxIndex);
-                System.out.println("total.x + \",\"+ total.y = " + total.x + ","+ total.y);
-                intervals.add(total);
+                intervals.add(new Point(minIndex, maxIndex));
             }
         }
 
@@ -118,10 +104,6 @@ public class Answer {
 
         return min;
     }
-//    021
-//    530
-//    624
-//
 
     public static String answer(String document, String[] searchTerms) {
         // Separate the word list
@@ -141,10 +123,8 @@ public class Answer {
             }
         }
 
-        Point answer = test(indices, searchTerms, 0, -1, -1);
+        Point answer = findShortestIndices(indices, searchTerms, 0, -1, -1);
 
-        System.out.println();
-        System.out.println("Final answer: ");
         String response = "";
         for (int index = answer.x; index <= answer.y; ++index) {
             response += wordList[index];
@@ -152,8 +132,6 @@ public class Answer {
                 response += " ";
             }
         }
-        System.out.println(answer);
-        System.out.println(indices);
 
         return response;
     }
