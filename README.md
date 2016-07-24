@@ -14,4 +14,4 @@
 ### Level 3
 * `when_it_rains_it_pours` time given: 96 hours
 * `save_beta_rabbit` time given: 96 hours
-* time given: ? hours
+* `spy_snippets` time given: 96 hours
