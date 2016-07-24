@@ -17,4 +17,11 @@ public class AnswerTest {
         String[] searchTerms = {"a", "c", "d"};
         Assert.assertEquals("c d a", Answer.answer(document, searchTerms));
     }
+
+    @Test
+    public void caseCTest() {
+        String document = "world there hello hello where world";
+        String[] searchTerms = {"hello", "world"};
+        Assert.assertEquals("world there hello", Answer.answer(document,searchTerms));
+    }
 }
