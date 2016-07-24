@@ -36,7 +36,9 @@
 
 package save_beta_rabbit;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Answer {
 //    http://codereview.stackexchange.com/questions/91317/google-foobar-challenge-save-beta-rabbit-in-python
