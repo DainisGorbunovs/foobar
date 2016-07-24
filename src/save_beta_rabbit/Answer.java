@@ -42,42 +42,44 @@ public class Answer {
 //    http://codereview.stackexchange.com/questions/91317/google-foobar-challenge-save-beta-rabbit-in-python
     public static int answer(int food, int[][] grid) {
         int N = grid.length;
-        List<List<List<Integer>>> ans_grid = new ArrayList<List<List<Integer>>>();
+        List<List<List<Integer>>> foodGrid = new ArrayList<List<List<Integer>>>();
 
         for (int row = 0; row < N; ++row) {
-            ans_grid.add(row, new ArrayList<List<Integer>>());
+            foodGrid.add(row, new ArrayList<List<Integer>>());
             for (int col = 0; col < N; ++col) {
-                ans_grid.get(row).add(col, new ArrayList<Integer>());
+                foodGrid.get(row).add(col, new ArrayList<Integer>());
 
-                int val = grid[row][col];
+                int gridValue = grid[row][col];
                 if (row == 0 && col == 0) {
-                    ans_grid.get(0).get(0).add(grid[0][0]);
+                    foodGrid.get(0).get(0).add(grid[0][0]);
                 }
 
                 if (row != 0) {
-                    for (Integer x : ans_grid.get(row-1).get(col)) {
-                        if (val + x <= food && !ans_grid.get(row).get(col).contains(val + x)) {
-                            ans_grid.get(row).get(col).add(val + x);
+                    for (Integer foodBefore : foodGrid.get(row-1).get(col)) {
+                        if (gridValue + foodBefore <= food
+                                && !foodGrid.get(row).get(col).contains(gridValue + foodBefore)) {
+                            foodGrid.get(row).get(col).add(gridValue + foodBefore);
                         }
                     }
                 }
                 if (col != 0) {
-                    for (Integer x : ans_grid.get(row).get(col-1)) {
-                        if (val + x <= food && !ans_grid.get(row).get(col).contains(val + x)) {
-                            ans_grid.get(row).get(col).add(val + x);
+                    for (Integer foodBefore : foodGrid.get(row).get(col-1)) {
+                        if (gridValue + foodBefore <= food
+                                && !foodGrid.get(row).get(col).contains(gridValue + foodBefore)) {
+                            foodGrid.get(row).get(col).add(gridValue + foodBefore);
                         }
                     }
                 }
             }
         }
 
-        List<Integer> all_ans = ans_grid.get(N-1).get(N-1);
-        Collections.sort(all_ans);
-        Collections.reverse(all_ans);
+        List<Integer> requiredFoods = foodGrid.get(N-1).get(N-1);
+        Collections.sort(requiredFoods);
+        Collections.reverse(requiredFoods);
 
-        for (Integer el : all_ans) {
-            if (el <= food) {
-                return food - el;
+        for (Integer requiredFood : requiredFoods) {
+            if (requiredFood <= food) {
+                return food - requiredFood;
             }
         }
 
