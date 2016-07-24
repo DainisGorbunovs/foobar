@@ -42,35 +42,36 @@ public class Answer {
 //    http://codereview.stackexchange.com/questions/91317/google-foobar-challenge-save-beta-rabbit-in-python
     public static int answer(int food, int[][] grid) {
         int N = grid.length;
-
-        List<Integer>[][] ans_grid = new ArrayList[N][N];
+        List<List<List<Integer>>> ans_grid = new ArrayList<List<List<Integer>>>();
 
         for (int row = 0; row < N; ++row) {
+            ans_grid.add(row, new ArrayList<List<Integer>>());
             for (int col = 0; col < N; ++col) {
-                ans_grid[row][col] = new ArrayList<Integer>();
+                ans_grid.get(row).add(col, new ArrayList<Integer>());
+
                 int val = grid[row][col];
                 if (row == 0 && col == 0) {
-                    ans_grid[0][0].add(grid[0][0]);
+                    ans_grid.get(0).get(0).add(grid[0][0]);
                 }
 
                 if (row != 0) {
-                    for (Integer x : ans_grid[row-1][col]) {
-                        if (val + x <= food && !ans_grid[row][col].contains(val + x)) {
-                            ans_grid[row][col].add(val + x);
+                    for (Integer x : ans_grid.get(row-1).get(col)) {
+                        if (val + x <= food && !ans_grid.get(row).get(col).contains(val + x)) {
+                            ans_grid.get(row).get(col).add(val + x);
                         }
                     }
                 }
                 if (col != 0) {
-                    for (Integer x : ans_grid[row][col-1]) {
-                        if (val + x <= food && !ans_grid[row][col].contains(val + x)) {
-                            ans_grid[row][col].add(val + x);
+                    for (Integer x : ans_grid.get(row).get(col-1)) {
+                        if (val + x <= food && !ans_grid.get(row).get(col).contains(val + x)) {
+                            ans_grid.get(row).get(col).add(val + x);
                         }
                     }
                 }
             }
         }
 
-        List<Integer> all_ans = ans_grid[N-1][N-1];
+        List<Integer> all_ans = ans_grid.get(N-1).get(N-1);
         Collections.sort(all_ans);
         Collections.reverse(all_ans);
 
