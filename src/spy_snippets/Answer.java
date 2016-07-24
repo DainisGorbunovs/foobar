@@ -87,14 +87,16 @@ public class Answer {
         for (Integer index : indices.get(searchTerms[termIndex])) {
             System.out.printf("Checking %d in %s\n", index, searchTerms[termIndex]);
             if (termIndex != searchTerms.length-1) {
+                int newStart = start;
+                int newEnd = end;
                 if (index < start || start < 0) {
-                    start = index;
+                    newStart = index;
                 }
                 if (index > end || end < 0){
-                    end = index;
+                    newEnd = index;
                 }
-                System.out.printf("[%d] Going to check with [start-end]: [%d:%d]\n", index, start, end);
-                intervals.add(test(indices, searchTerms, termIndex + 1, start, end));
+                System.out.printf("[%d] Going to check with [start-end]: [%d:%d]\n", index, newStart, newEnd);
+                intervals.add(test(indices, searchTerms, termIndex + 1, newStart, newEnd));
             } else {
                 int minIndex = (start < index) ? ((start >= 0) ? start : index) : index;
                 int maxIndex = (end > index) ? end : index;
@@ -166,16 +168,16 @@ public class Answer {
         // combinations: [1-4]
         // shortest combination: [1-4] => "google employees can program"
 
-//        String document = "a b c d a";
-//        String[] searchTerms = {"a", "c", "d"};
+        String document = "a b c d a";
+        String[] searchTerms = {"a", "c", "d"};
         // a: 0, 4
         // c: 2
         // d: 3
         // combinations: [0-3], [2-4]
         // shortest combination: [2-4] => "c d a"
 
-        String document = "world there hello hello where world";
-        String[] searchTerms = {"hello", "world"};
+//        String document = "world there hello hello where world";
+//        String[] searchTerms = {"hello", "world"};
         // hello: 2, 3
         // world: 0, 5
         // combinations: [2-0], [2-5], [3-0], [3-5]
