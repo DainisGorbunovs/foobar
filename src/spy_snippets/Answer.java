@@ -41,6 +41,8 @@
 
 package spy_snippets;
 
+import com.sun.xml.internal.ws.util.StringUtils;
+
 import java.awt.*;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -141,10 +143,17 @@ public class Answer {
 
         System.out.println();
         System.out.println("Final answer: ");
+        String response = "";
+        for (int index = answer.x; index <= answer.y; ++index) {
+            response += wordList[index];
+            if (index != answer.y) {
+                response += " ";
+            }
+        }
         System.out.println(answer);
         System.out.println(indices);
 
-        return "";
+        return response;
     }
 
 
@@ -165,8 +174,8 @@ public class Answer {
         // combinations: [0-3], [2-4]
         // shortest combination: [2-4] => "c d a"
 
-//        String document = "world there hello hello where world";
-//        String[] searchTerms = {"hello", "world"};
+        String document = "world there hello hello where world";
+        String[] searchTerms = {"hello", "world"};
         // hello: 2, 3
         // world: 0, 5
         // combinations: [2-0], [2-5], [3-0], [3-5]
