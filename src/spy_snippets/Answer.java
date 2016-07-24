@@ -40,14 +40,140 @@
 
 
 package spy_snippets;
+
+import java.awt.*;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Answer {
+    private static Point test(Map<String, List<Integer>> indices, String[] searchTerms, int termIndex, int start, int end) {
+        // select one index from each search term
+        // find beginning and ending indices for the search terms
+        // return them
+        // choose another index, find beginning and ending indices for search terms
+
+//        int begin = 0;
+//        int end = 0;
+//        foreach
+//          test(begin,end, termIndex)
+
+//        ArrayList begin, end
+//                return final begin and end
+//        test(indices, searchTerms, 1, begin, end)
+//        a: [0,3] = test(indices, searchTerms, 1, 0, 0)
+//           [2,4] = test(indices, searchTerms, 1, 4, 4)
+//           if (termIndex==0):
+//             from the arraylist find first least and return [2,4]
+//        ...
+//        c: test(indices, searchTerms, 2, 0, 2)
+//           test(indices, searchTerms, 2, 0, 5)
+//           iterate through arraylist of results and return the first least,
+//           return [0, 3]
+//
+//           recursively test(indices, searchTerms, 2, 2, 4)
+//           recursively test(indices, searchTerms, 2, 4, 5)
+//           return [2, 4]
+//        d: return [0, 3]
+//           return [0, 5]
+//           return [2, 4]
+//           return [2, 5]
+
+        List<Point> intervals = new ArrayList<Point>();
+        for (Integer index : indices.get(searchTerms[termIndex])) {
+            System.out.printf("Checking %d in %s\n", index, searchTerms[termIndex]);
+            if (termIndex != searchTerms.length-1) {
+                if (index < start || start < 0) {
+                    start = index;
+                }
+                if (index > end || end < 0){
+                    end = index;
+                }
+                System.out.printf("[%d] Going to check with [start-end]: [%d:%d]\n", index, start, end);
+                intervals.add(test(indices, searchTerms, termIndex + 1, start, end));
+            } else {
+                int minIndex = (start < index) ? ((start >= 0) ? start : index) : index;
+                int maxIndex = (end > index) ? end : index;
+                Point total = new Point(minIndex, maxIndex);
+                System.out.println("total.x + \",\"+ total.y = " + total.x + ","+ total.y);
+                intervals.add(total);
+            }
+        }
+
+        Point min = new Point();
+        int minLength = -1;
+        for (Point interval : intervals) {
+            int length = interval.y - interval.x;
+            if (length < minLength || minLength < 0) {
+                minLength = length;
+                min = interval;
+            }
+        }
+
+        return min;
+    }
+//    021
+//    530
+//    624
+//
+
     public static String answer(String document, String[] searchTerms) {
-        // Your code goes here.
+        // Separate the word list
+        String[] wordList = document.split(" ");
+
+        // Initialise the hash map to store term indices
+        Map<String, List<Integer>> indices = new HashMap<String, List<Integer>>();
+        for (String term : searchTerms) {
+            indices.put(term, new ArrayList<Integer>());
+        }
+
+        // Add the indices
+        List termList = Arrays.asList(searchTerms);
+        for (int index = 0; index < wordList.length; ++index) {
+            if (termList.contains(wordList[index])) {
+                indices.get(wordList[index]).add(index);
+            }
+        }
+
+        Point answer = test(indices, searchTerms, 0, -1, -1);
+
+        System.out.println();
+        System.out.println("Final answer: ");
+        System.out.println(answer);
+        System.out.println(indices);
 
         return "";
     }
 
-    public static void main(String[] args) {
 
+
+    public static void main(String[] args) {
+//        String document = "many google employees can program";
+//        String[] searchTerms = {"google", "program"};
+        // google: 1
+        // program: 4
+        // combinations: [1-4]
+        // shortest combination: [1-4] => "google employees can program"
+
+//        String document = "a b c d a";
+//        String[] searchTerms = {"a", "c", "d"};
+        // a: 0, 4
+        // c: 2
+        // d: 3
+        // combinations: [0-3], [2-4]
+        // shortest combination: [2-4] => "c d a"
+
+//        String document = "world there hello hello where world";
+//        String[] searchTerms = {"hello", "world"};
+        // hello: 2, 3
+        // world: 0, 5
+        // combinations: [2-0], [2-5], [3-0], [3-5]
+        // shortest combinations: [0-2] => "world there hello", [3-5] => "hello where world"
+        // shortest combination: [0-2] => "world there hello"
+
+        String response = answer(document, searchTerms);
+        System.out.println("response = " + response);
     }
 }
