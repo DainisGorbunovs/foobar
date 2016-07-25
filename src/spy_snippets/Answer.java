@@ -41,7 +41,6 @@
 
 package spy_snippets;
 
-import java.awt.Point;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +48,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Answer {
-    private static Point findShortestIndices(Map<String, List<Integer>> indices,
+    private static final int first = 0;
+    private static final int last = 1;
+    private static Integer[] findShortestIndices(Map<String, List<Integer>> indices,
                                              String[] searchTerms, int termIndex, int start, int end) {
         // select one index from each search term
         // initially it is beginning and ending index
@@ -78,7 +79,7 @@ public class Answer {
         //   return [2, 4]
         //   return [2, 5]
 
-        List<Point> intervals = new ArrayList<Point>();
+        List<Integer[]> intervals = new ArrayList<Integer[]>();
         for (Integer index : indices.get(searchTerms[termIndex])) {
             if (termIndex != searchTerms.length-1) {
                 int minIndex = (index < start || start < 0) ? index : start;
@@ -88,14 +89,14 @@ public class Answer {
             } else {
                 int minIndex = (start < index) ? ((start >= 0) ? start : index) : index;
                 int maxIndex = (end > index) ? end : index;
-                intervals.add(new Point(minIndex, maxIndex));
+                intervals.add(new Integer[]{minIndex, maxIndex});
             }
         }
 
-        Point min = new Point();
+        Integer[] min = new Integer[2];
         int minLength = -1;
-        for (Point interval : intervals) {
-            int length = interval.y - interval.x;
+        for (Integer[] interval : intervals) {
+            int length = interval[last] - interval[first];
             if (length < minLength || minLength < 0) {
                 minLength = length;
                 min = interval;
@@ -123,12 +124,12 @@ public class Answer {
             }
         }
 
-        Point answer = findShortestIndices(indices, searchTerms, 0, -1, -1);
+        Integer[] answer = findShortestIndices(indices, searchTerms, 0, -1, -1);
 
         String response = "";
-        for (int index = answer.x; index <= answer.y; ++index) {
+        for (int index = answer[first]; index <= answer[last]; ++index) {
             response += wordList[index];
-            if (index != answer.y) {
+            if (index != answer[last]) {
                 response += " ";
             }
         }
