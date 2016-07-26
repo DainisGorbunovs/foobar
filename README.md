@@ -17,4 +17,4 @@
 * `spy_snippets` time given: 96 hours
 
 ### Level 4
-* `undercover_underground` time given: 144
+* `undercover_underground` time given: 144 hours
