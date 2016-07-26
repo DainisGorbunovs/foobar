@@ -15,3 +15,6 @@
 * `when_it_rains_it_pours` time given: 96 hours
 * `save_beta_rabbit` time given: 96 hours
 * `spy_snippets` time given: 96 hours
+
+### Level 4
+* `undercover_underground` time given: 144
