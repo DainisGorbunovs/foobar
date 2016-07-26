@@ -41,100 +41,74 @@
 
 package spy_snippets;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Answer {
-    private static final int first = 0;
-    private static final int last = 1;
-    private static Integer[] findShortestIndices(Map<String, List<Integer>> indices,
-                                             String[] searchTerms, int termIndex, int start, int end) {
-        // select one index from each search term
-        // initially it is beginning and ending index
-        // go deeper in the search terms until find final indices
-        // keep updating beginning and ending index
-        // out of all solutions return the solution with least number of indices
-        // return it
-
-        // Sample thinking:
-        //test(indices, searchTerms, 1, begin, end)
-        //a: [0,3] = test(indices, searchTerms, 1, 0, 0)
-        //   [2,4] = test(indices, searchTerms, 1, 4, 4)
-        //   if (termIndex==0):
-        //     from the arraylist find first least and return [2,4]
-        //...
-        //c: test(indices, searchTerms, 2, 0, 2)
-        //   test(indices, searchTerms, 2, 0, 5)
-        //   iterate through arraylist of results and return the first least,
-        //   return [0, 3]
-        //
-        //   recursively test(indices, searchTerms, 2, 2, 4)
-        //   recursively test(indices, searchTerms, 2, 4, 5)
-        //   return [2, 4]
-        //d: return [0, 3]
-        //   return [0, 5]
-        //   return [2, 4]
-        //   return [2, 5]
-
-        List<Integer[]> intervals = new ArrayList<Integer[]>();
-        for (Integer index : indices.get(searchTerms[termIndex])) {
-            if (termIndex != searchTerms.length-1) {
-                int minIndex = (index < start || start < 0) ? index : start;
-                int maxIndex = (index > end || end < 0) ? index : end;
-
-                intervals.add(findShortestIndices(indices, searchTerms, termIndex + 1, minIndex, maxIndex));
-            } else {
-                int minIndex = (start < index) ? ((start >= 0) ? start : index) : index;
-                int maxIndex = (end > index) ? end : index;
-                intervals.add(new Integer[]{minIndex, maxIndex});
-            }
-        }
-
-        Integer[] min = new Integer[2];
-        int minLength = -1;
-        for (Integer[] interval : intervals) {
-            int length = interval[last] - interval[first];
-            if (length < minLength || minLength < 0) {
-                minLength = length;
-                min = interval;
-            }
-        }
-
-        return min;
-    }
-
+    private static final int start = 0;
+    private static final int end   = 1;
     public static String answer(String document, String[] searchTerms) {
-        // Separate the word list
-        String[] wordList = document.split(" ");
-
         // Initialise the hash map to store term indices
         Map<String, List<Integer>> indices = new HashMap<String, List<Integer>>();
         for (String term : searchTerms) {
             indices.put(term, new ArrayList<Integer>());
         }
 
+        // Separate the word list
+        String[] tokens = document.split(" ");
+
         // Add the indices
-        List termList = Arrays.asList(searchTerms);
-        for (int index = 0; index < wordList.length; ++index) {
-            if (termList.contains(wordList[index])) {
-                indices.get(wordList[index]).add(index);
+        List<String> termList = Arrays.asList(searchTerms);
+        for (int index = 0; index < tokens.length; ++index) {
+            if (termList.contains(tokens[index])) {
+                indices.get(tokens[index]).add(index);
             }
         }
 
-        Integer[] answer = findShortestIndices(indices, searchTerms, 0, -1, -1);
+        // Keep track of the minimum length and the indices' interval
+        int minLength = Integer.MAX_VALUE;
+        int[] interval = new int[2];
 
-        String response = "";
-        for (int index = answer[first]; index <= answer[last]; ++index) {
-            response += wordList[index];
-            if (index != answer[last]) {
-                response += " ";
+        // Go through all search terms
+        for (String term : indices.keySet()) {
+            // Go through all positions of the term in the document
+            for (Integer position : indices.get(term)) {
+                List<Integer> positions = new ArrayList<Integer>(position);
+
+                // Go through all search terms
+                for (String other_term : indices.keySet()) {
+                    List<Integer> distances = new ArrayList<Integer>();
+                    // Find distance between the positions of the first search term's position
+                    // and the iterated search term's position
+                    for (Integer other_position : indices.get(other_term)) {
+                        distances.add(Math.abs(position - other_position));
+                    }
+                    // Add to the list of positions the index of iterated
+                    // search term's position which has the smallest distance between them
+                    int minIndex = distances.indexOf(Collections.min(distances));
+                    positions.add(indices.get(other_term).get(minIndex));
+                }
+
+                // Find length between positions
+                // If smaller than recorded length, update the new interval
+                int length = Collections.max(positions) - Collections.min(positions);
+                if (length < minLength) {
+                    interval[start] = Collections.min(positions);
+                    interval[end] = Collections.max(positions);
+                    minLength = length;
+                }
             }
         }
 
-        return response;
+        // Join the shortest interval of words together
+        String snippet = "";
+        for (int sliceIndex = interval[start]; sliceIndex <= interval[end]; ++sliceIndex) {
+            snippet += tokens[sliceIndex];
+            if (sliceIndex != interval[end]) {
+                snippet += " ";
+            }
+        }
+
+        return snippet;
     }
 
     public static void main(String[] args) {
@@ -161,14 +135,17 @@ public class Answer {
         // shortest combinations: [0-2] => "world there hello", [3-5] => "hello where world"
         // shortest combination: [0-2] => "world there hello"
 
-        String document = "Lorem Ipsum is simply dummy text of the printing and typesetting industry Lorem Ipsum " +
-                "has been the industrys standard dummy text ever since the 1500s when an unknown printer took a " +
-                "of type and scrambled it to make a type specimen book It has survived not only five centuries but " +
-                "also the leap into electronic typesetting remaining essentially unchanged It was popularised in " +
-                "the 1960s with the release of Letraset sheets containing Lorem Ipsum passages and more recently " +
-                "with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum";
-        String[] searchTerms = {"the", "industry", "Ipsum"};
+//        String document = "Lorem Ipsum is simply dummy text of the printing and typesetting industry Lorem Ipsum " +
+//                "has been the industrys standard dummy text ever since the 1500s when an unknown printer took a " +
+//                "of type and scrambled it to make a type specimen book It has survived not only five centuries but " +
+//                "also the leap into electronic typesetting remaining essentially unchanged It was popularised in " +
+//                "the 1960s with the release of Letraset sheets containing Lorem Ipsum passages and more recently " +
+//                "with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum";
+//        String[] searchTerms = {"the", "industry", "Ipsum"};
 
+        String document = "many google employees can program can google employees because " +
+                "google is a technology company that writes programs";
+        String[] searchTerms = {"google", "program", "can"};
         String response = answer(document, searchTerms);
         System.out.println("response = " + response);
     }
