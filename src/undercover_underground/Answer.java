@@ -20,6 +20,9 @@
     C-A-B
 
     With 4 warrens and 6 tunnels, the only way to connect them is to connect each warren to every other warren.
+    A - B
+    | X |
+    C - D
 
     Write a function answer(N, K) which returns the number of ways to connect N distinctly labelled warrens with
     exactly K tunnels, so that there is a path between any two warrens.
@@ -31,8 +34,22 @@
 
 package undercover_underground;
 
+import java.util.Random;
+
 public class Answer {
     public static String answer(int N, int K) {
-        return "";
+        if (K < N)
+            return "1";
+        return "0";
+    }
+
+    public static void main(String[] args) {
+        // N is at least 2 and at most 20
+        System.out.println("Choosing random N (warrens) and K (tunnels)");
+        int N = new Random().nextInt(19) + 2;
+        int K = new Random().nextInt(N*(N-1)/2 - (N-1) + 1) + (N-1);
+        System.out.printf("N = %d (range:[%d-%d])\n", N, 2, 20);
+        System.out.printf("K = %d (range:[%d-%d] specific for N = %d)\n", K, N-1, N*(N-1)/2, N);
+        System.out.println("Answer: " + answer(N, K) + ".");
     }
 }
