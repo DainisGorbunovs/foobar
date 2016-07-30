@@ -34,13 +34,82 @@
 
 package undercover_underground;
 
-import java.util.Random;
+import java.math.BigInteger;
+import java.util.*;
 
 public class Answer {
+    static Map<List<Integer>, BigInteger> coefficientMemo = new HashMap<List<Integer>, BigInteger>();
+    static Map<List<Integer>, BigInteger> countMemo = new HashMap<List<Integer>, BigInteger>();
+
+    private static BigInteger getBinomialCoefficient(int n, int k) {
+        // http://stackoverflow.com/questions/11032781/fastest-way-to-generate-binomial-coefficients
+        List<Integer> key = Arrays.asList(n, k);
+
+        // Check edge cases
+        if (n == k || k == 0) return BigInteger.ONE;
+        if (k > n) return BigInteger.ZERO;
+        if (k > (n - k)) k = n - k;
+        if (k == 1) return BigInteger.valueOf(n);
+
+        // Check if memoized
+        if (coefficientMemo.containsKey(key)) {
+            return coefficientMemo.get(key);
+        }
+
+        // Calculate the coefficient
+        BigInteger coefficient = BigInteger.ONE;
+        for (int i = 1; i <= k; ++i) {
+            coefficient = coefficient
+                    .multiply(BigInteger.valueOf(n - (k - i)))
+                    .divide(BigInteger.valueOf(i));
+
+        }
+
+        // Memoize the calculated coefficient
+        coefficientMemo.put(key, coefficient);
+
+        return coefficient;
+    }
+
+    private static BigInteger getNumberOfWays(int n, int k) {
+        List<Integer> key = Arrays.asList(n, k);
+
+        // Check if memoized count answer
+        if (countMemo.containsKey(key)) {
+            return countMemo.get(key);
+        }
+
+        // Cayley's formula
+        if (k == n - 1) {
+            return BigInteger.valueOf((int) Math.pow(n, n-2));
+        }
+
+        // Calculate the number of ways
+        // http://math.stackexchange.com/questions/689526/how-many-connected-graphs-over-v-vertices-and-e-edges
+        BigInteger count = getBinomialCoefficient(n*(n-1)/ 2, k);
+
+        for (int m = 0; m <= n-2; ++m) {
+            BigInteger tempCount = BigInteger.ZERO;
+
+            for (int p = Math.max(0, k - m*(m+1)/2); p <= k - m; ++p) {
+                tempCount = tempCount
+                        .add(getBinomialCoefficient((n-1-m) * (n-2-m) / 2, p)
+                            .multiply(getNumberOfWays(m+1, k-p))
+                        );
+            }
+
+            count = count
+                    .subtract(getBinomialCoefficient(n-1, m)
+                            .multiply(tempCount)
+                    );
+        }
+
+        countMemo.put(key, count);
+
+        return count;
+    }
     public static String answer(int N, int K) {
-        if (K < N)
-            return "1";
-        return "0";
+        return getNumberOfWays(N, K).toString();
     }
 
     public static void main(String[] args) {
