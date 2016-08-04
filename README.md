@@ -18,3 +18,4 @@
 
 ### Level 4
 * [`undercover_underground`](tasks/undercover_underground) time given: 144 hours
+* [`minions_bored_game`](tasks/minions_bored_game) time given: 144 hours
