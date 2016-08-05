@@ -19,3 +19,12 @@
 ### Level 4
 * [`undercover_underground`](tasks/undercover_underground) time given: 144 hours
 * [`minions_bored_game`](tasks/minions_bored_game) time given: 144 hours
+* [`binary_bunnies`](tasks/binary_bunnies) time given: 144 hours
+* _another task_
+
+### Level 5
+* _another task_
+* _another task_
+* _another task_
+* _another task_
+* _another task_
