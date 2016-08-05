@@ -34,12 +34,53 @@
  */
 package minions_bored_game;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Answer {
+    // Memoize counts
+    static Map<List<Integer>, Integer> countMemo = new HashMap<List<Integer>, Integer>();
+
+    // Returns max leaderboard size
+    public static int count(int t, int n, int position) {
+        // If at the last square, can only stay
+        if (position == n-1) {
+            return 1;
+        }
+        // Cannot go behind leftest or rightest squares
+        // t == n-1 is min
+        if (position < 0 || position >= n || t < n-position-1) {
+            return 0;
+        }
+
+        // If memoized, return the cached value
+        List<Integer> key = Arrays.asList(t, n, position);
+        if (countMemo.containsKey(key))
+            return countMemo.get(key);
+
+        // Else, start counting
+        int count = 0;
+        count += count(t-1, n, position-1); // go left
+        count += count(t-1, n, position);   // stay
+        count += count(t-1, n, position+1); // go right
+        count %= 123454321;
+
+        // Memoize the count
+        countMemo.put(key, count);
+        return count;
+    }
+
     public static int answer(int t, int n) {
-        return 0;
+        return count(t, n, 0);
     }
 
     public static void main(String[] args) {
-        System.out.println(answer(1,2));
+        System.out.println("1 ?= " + answer(1,2)+"\n");
+        System.out.println("2 ?= " + answer(2,2));
+        System.out.println("3 ?= " + answer(3,2)+"\n");
+        System.out.println("7 ?= " + answer(4,3)+"\n");
+        System.out.println("862 ?= " + answer(10,6)+"\n");
     }
 }
