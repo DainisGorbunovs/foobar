@@ -25,13 +25,181 @@
  */
 package binary_bunnies;
 
+import java.math.BigInteger;
+import java.util.*;
+
+class BinarySearchTree {
+    public Integer number;
+    public BinarySearchTree left;
+    public BinarySearchTree right;
+
+    public BinarySearchTree() {
+        number = null;
+        left   = null;
+        right  = null;
+    }
+
+    public BinarySearchTree(int[] list) {
+        this();
+        for (int number : list) {
+            insert(number);
+        }
+    }
+
+    public BinarySearchTree getLeft() {
+        if (left != null)
+            return left;
+
+        left = new BinarySearchTree();
+        return left;
+    }
+
+    public BinarySearchTree getRight() {
+        if (right != null)
+            return right;
+
+        right = new BinarySearchTree();
+        return right;
+    }
+
+    public void insert(int additional) {
+        if (number != null) {
+            if (number > additional) {
+                left.insert(additional);
+            } else {
+                right.insert(additional);
+            }
+        } else {
+            number = additional;
+            left = new BinarySearchTree();
+            right = new BinarySearchTree();
+        }
+    }
+
+    public int getSize() {
+        if (number == null) {
+            return 0;
+        }
+
+        return left.getSize() + right.getSize() + 1;
+    }
+
+    public List<Integer> getPreOrderList() {
+        List<Integer> list = new ArrayList<Integer>();
+        if (number != null) {
+            list.add(number);
+            list.addAll(left.getPreOrderList());
+            list.addAll(right.getPreOrderList());
+        }
+        return list;
+    }
+}
+
 public class Answer {
+    static Map<List<Integer>, BigInteger> coefficientMemo = new HashMap<List<Integer>, BigInteger>();
+
+    private static BigInteger getBinomialCoefficient(int n, int k) {
+        // http://stackoverflow.com/questions/11032781/fastest-way-to-generate-binomial-coefficients
+        List<Integer> key = Arrays.asList(n, k);
+
+        // Check edge cases
+        if (n == k || k == 0) return BigInteger.ONE;
+        if (k > n) return BigInteger.ZERO;
+        if (k > (n - k)) k = n - k;
+        if (k == 1) return BigInteger.valueOf(n);
+
+        // Check if memoized
+        if (coefficientMemo.containsKey(key)) {
+            return coefficientMemo.get(key);
+        }
+
+        // Calculate the coefficient
+        BigInteger coefficient = BigInteger.ONE;
+        for (int i = 1; i <= k; ++i) {
+            coefficient = coefficient
+                    .multiply(BigInteger.valueOf(n - (k - i)))
+                    .divide(BigInteger.valueOf(i));
+
+        }
+
+        // Memoize the calculated coefficient
+        coefficientMemo.put(key, coefficient);
+
+        return coefficient;
+    }
+
+    public static BigInteger getNumberOfPermutations(BinarySearchTree tree) {
+        if (tree.number == null) {
+            return BigInteger.ONE;
+        }
+
+        BigInteger leftPermutations = getNumberOfPermutations(tree.getLeft());
+        BigInteger rightPermutations = getNumberOfPermutations(tree.getRight());
+
+        int leftSize = tree.getLeft().getSize();
+        int rightSize = tree.getRight().getSize();
+
+        BigInteger binomialCoefficient = getBinomialCoefficient(leftSize + rightSize, rightSize);
+
+        return binomialCoefficient
+                .multiply(leftPermutations)
+                .multiply(rightPermutations);
+    }
+
     public static String answer(int[] seq) {
-        return "";
+        BinarySearchTree tree = new BinarySearchTree(seq);
+        return getNumberOfPermutations(tree).toString();
     }
 
     public static void main(String[] args) {
         System.out.println("6 ?= " + answer(new int[] {5, 9, 8, 2, 1}));
+        System.out.println("6 ?= " + answer(new int[] {5, 2, 9, 1, 8}));
+        System.out.println("8 ?= " + answer(new int[] {8, 2, 1, 5, 9}));
         System.out.println("1 ?= " + answer(new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}));
     }
 }
+
+/*
+     5
+  2     9
+1     8
+
+Level 1: 5
+Level 2: 2, 9
+Level 3: 1, 8
+
+1) Start with root: 5
+   Next is 2 (left of 5) or 9 (right of 5)
+   1) if 2:
+      next is 1 (left of 2) or 9 (right of 5)
+      1) if 1:
+         next is 9 (right of 5)
+         1) 9:
+            then:
+               next is 8
+      2) if 9:
+         next is 1 (left of 2) or 8 (left of 9)
+         1) if 1:
+           then:
+              next is 8
+         2) if 8:
+           then:
+              next is 1
+   2) if 9:
+      next is 8 (left of 9) or 2 (left of 5)
+      1) if 8:
+         next is 2 (left of 5)
+         1) 2:
+            then:
+               next is 1
+      2) if 2:
+         next is 1 (left of 2) or 8 (left of 9)
+         1) if 1:
+            then:
+               next is 8
+         2) if 8:
+            then:
+               next is 1
+Return: 6
+
+ */
