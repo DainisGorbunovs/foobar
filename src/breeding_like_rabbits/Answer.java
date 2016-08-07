@@ -30,13 +30,47 @@
 
 package breeding_like_rabbits;
 
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Answer {
+    static Map<Integer, Integer> countMemo = new HashMap<Integer, Integer>();
+    public static int getCount(int n) {
+        if (n == 0 || n == 1)
+            return 1;
+        if (n == 2)
+            return 2;
+        if (countMemo.containsKey(n))
+            return countMemo.get(n);
+
+        // Count of zombits at time n
+        int count = 0;
+        // If even, use R(2n) formula
+        if (n % 2 == 0) {
+            count = getCount(n/2) + getCount(n/2 + 1) + n;
+        } else { // Use R(2n+1) formula
+            count = getCount((n-1)/2 - 1) + getCount((n-1)/2) + 1;
+        }
+
+        countMemo.put(n, count);
+        return count;
+    }
+
     public static String answer(String str_S) {
-        return "";
+        BigInteger answer = BigInteger.ZERO;
+
+
+        if (answer.equals(BigInteger.ZERO))
+            return "None";
+
+        return answer.toString();
     }
 
     public static void main(String[] args) {
-        System.out.println("4 =? " + answer("7"));
-        System.out.println("None =? " + answer("100"));
+//        System.out.println("4 =? " + answer("7"));
+//        System.out.println("None =? " + answer("100"));
+        for (int i = 0; i <= 100; ++i)
+            System.out.println("getCount("+i+") = " + getCount(i));
     }
 }
