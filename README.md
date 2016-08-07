@@ -20,7 +20,7 @@
 * [`undercover_underground`](tasks/undercover_underground) time given: 144 hours
 * [`minions_bored_game`](tasks/minions_bored_game) time given: 144 hours
 * [`binary_bunnies`](tasks/binary_bunnies) time given: 144 hours
-* _another task_
+* [`breeding_like_rabbits`](tasks/breeding_like_rabbits) time given: 144 hours
 
 ### Level 5
 * _another task_
