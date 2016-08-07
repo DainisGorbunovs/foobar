@@ -78,3 +78,32 @@ public class Answer {
         }
     }
 }
+/*
+ Answer is initially ZERO
+
+ Start counting
+ Count max differences
+ If max difference + count is above the neededCount, break the loop
+ if the count equals to the neededCount, update Answer
+
+ Return the answer
+ If it is 0, return "None"
+ Else, return answer.toString()
+
+
+ Calculating the differences:
+
+    R(0) = 1
+    R(1) = 1, difference: 0
+    R(2) = 2, difference: 1
+    R(3) = 3, difference: 1
+    R(4) = 9, difference: 6
+    R(2n) = R(n) + R(n + 1) + n (for n > 1)
+    R(2n + 1) = R(n - 1) + R(n) + 1 (for n >= 1)
+
+    R(2n + 1) - R(2n) = R(n - 1) + R(n) + 1 - R(n) - R(n + 1) - n
+
+    R(2n) - R(2n - 1) = ?
+
+  Memoize differences
+ */
