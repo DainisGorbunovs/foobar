@@ -37,6 +37,8 @@ import java.util.Map;
 public class Answer {
     static Map<Integer, Integer> countMemo = new HashMap<Integer, Integer>();
     public static int getCount(int n) {
+        if (n < 0)
+            return 0;
         if (n == 0 || n == 1)
             return 1;
         if (n == 2)
@@ -58,8 +60,9 @@ public class Answer {
     }
 
     public static String answer(String str_S) {
-        BigInteger answer = BigInteger.ZERO;
+        BigInteger neededCount = new BigInteger(str_S);
 
+        BigInteger answer = BigInteger.ZERO;
 
         if (answer.equals(BigInteger.ZERO))
             return "None";
@@ -70,7 +73,8 @@ public class Answer {
     public static void main(String[] args) {
 //        System.out.println("4 =? " + answer("7"));
 //        System.out.println("None =? " + answer("100"));
-        for (int i = 0; i <= 100; ++i)
+        for (int i = 0; i <= 100; ++i) {
             System.out.println("getCount("+i+") = " + getCount(i));
+        }
     }
 }
