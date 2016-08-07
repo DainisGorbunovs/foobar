@@ -35,24 +35,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Answer {
-    static Map<Integer, Integer> countMemo = new HashMap<Integer, Integer>();
-    public static int getCount(int n) {
-        if (n < 0)
-            return 0;
-        if (n == 0 || n == 1)
-            return 1;
-        if (n == 2)
-            return 2;
+    static Map<BigInteger, BigInteger> countMemo = new HashMap<BigInteger, BigInteger>();
+    private static final BigInteger TWO = BigInteger.valueOf(2);
+    public static BigInteger getCount(BigInteger n) {
+        if (n.compareTo(BigInteger.ZERO) < 0)
+            return BigInteger.ZERO;
+        if (n.equals(BigInteger.ZERO) || n.equals(BigInteger.ONE))
+            return BigInteger.ONE;
+        if (n.equals(TWO))
+            return TWO;
         if (countMemo.containsKey(n))
             return countMemo.get(n);
 
         // Count of zombits at time n
-        int count = 0;
+        BigInteger count;
         // If even, use R(2n) formula
-        if (n % 2 == 0) {
-            count = getCount(n/2) + getCount(n/2 + 1) + n;
+        if (n.mod(TWO).equals(BigInteger.ZERO)) {
+            count = getCount(n.shiftRight(1))
+                    .add(getCount(n.shiftRight(1).add(BigInteger.ONE)))
+                    .add(n);
         } else { // Use R(2n+1) formula
-            count = getCount((n-1)/2 - 1) + getCount((n-1)/2) + 1;
+            count = getCount(n.subtract(BigInteger.ONE).shiftRight(1).subtract(BigInteger.ONE))
+                    .add(getCount(n.subtract(BigInteger.ONE).shiftRight(1)))
+                    .add(BigInteger.ONE);
         }
 
         countMemo.put(n, count);
@@ -61,7 +66,6 @@ public class Answer {
 
     public static String answer(String str_S) {
         BigInteger neededCount = new BigInteger(str_S);
-
         BigInteger answer = BigInteger.ZERO;
 
         if (answer.equals(BigInteger.ZERO))
@@ -73,37 +77,8 @@ public class Answer {
     public static void main(String[] args) {
 //        System.out.println("4 =? " + answer("7"));
 //        System.out.println("None =? " + answer("100"));
-        for (int i = 0; i <= 100; ++i) {
-            System.out.println("getCount("+i+") = " + getCount(i));
+        for (int i = 0; i <= 50; ++i) {
+            System.out.println("getCount("+i+") = " + getCount(BigInteger.valueOf(i)));
         }
     }
 }
-/*
- Answer is initially ZERO
-
- Start counting
- Count max differences
- If max difference + count is above the neededCount, break the loop
- if the count equals to the neededCount, update Answer
-
- Return the answer
- If it is 0, return "None"
- Else, return answer.toString()
-
-
- Calculating the differences:
-
-    R(0) = 1
-    R(1) = 1, difference: 0
-    R(2) = 2, difference: 1
-    R(3) = 3, difference: 1
-    R(4) = 9, difference: 6
-    R(2n) = R(n) + R(n + 1) + n (for n > 1)
-    R(2n + 1) = R(n - 1) + R(n) + 1 (for n >= 1)
-
-    R(2n + 1) - R(2n) = R(n - 1) + R(n) + 1 - R(n) - R(n + 1) - n
-
-    R(2n) - R(2n - 1) = ?
-
-  Memoize differences
- */
