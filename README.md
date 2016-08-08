@@ -23,7 +23,7 @@
 * [`breeding_like_rabbits`](tasks/breeding_like_rabbits) time given: 144 hours
 
 ### Level 5
-* _another task_
+* [`mad_science_quarterly`](tasks/mad_science_quarterly) time given: 192 hours
 * _another task_
 * _another task_
 * _another task_
