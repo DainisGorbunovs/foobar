@@ -48,26 +48,69 @@ public class Answer {
             return countMemo.get(n);
 
         // Count of zombits at time n
-        BigInteger count;
-        // If even, use R(2n) formula
-        if (n.mod(TWO).equals(BigInteger.ZERO)) {
-            count = getCount(n.shiftRight(1))
-                    .add(getCount(n.shiftRight(1).add(BigInteger.ONE)))
-                    .add(n);
-        } else { // Use R(2n+1) formula
-            count = getCount(n.subtract(BigInteger.ONE).shiftRight(1).subtract(BigInteger.ONE))
-                    .add(getCount(n.subtract(BigInteger.ONE).shiftRight(1)))
+        // First from 2n find n by shifting
+        BigInteger half = n.shiftRight(1);
+        // Get R(n)
+        BigInteger count = getCount(half);
+
+        if (n.testBit(0))
+            // If odd, use R(2n+1) formula
+            count = count
+                    .add(getCount(half.subtract(BigInteger.ONE)))
                     .add(BigInteger.ONE);
-        }
+        else
+            // If even, use R(2n) formula
+            count = count
+                    .add(getCount(half.add(BigInteger.ONE)))
+                    .add(half);
 
         countMemo.put(n, count);
         return count;
     }
 
+    public static BigInteger binarySearch(BigInteger start, BigInteger end,
+                                          BigInteger neededCount, boolean parity) {
+        // Parity: odd-true, even-false
+        if (end.compareTo(start) <= 0)
+            return BigInteger.ZERO;
+
+        // Find midpoint
+        BigInteger midpoint = start.add(
+                end.subtract(start).shiftRight(1)
+        );
+
+        // Fix midpoint to be parity accurate
+        if (parity != midpoint.testBit(0)) {
+            midpoint = midpoint.add(BigInteger.ONE);
+        }
+
+        // Get count at midpoint
+        BigInteger count = getCount(midpoint);
+
+        // If found count is equal to the needed, answer is at midpoint
+        if (count.equals(neededCount))
+            return midpoint;
+
+        // Change starting or ending point to be at midpoint
+        if (count.compareTo(neededCount) > 0)
+            end = midpoint.subtract(BigInteger.ONE);
+        else
+            start = midpoint.add(BigInteger.ONE);
+
+        // Continue searching
+        return binarySearch(start, end, neededCount, parity);
+    }
+
     public static String answer(String str_S) {
         BigInteger neededCount = new BigInteger(str_S);
-        BigInteger answer = BigInteger.ZERO;
+        // Start with odd binary search
+        BigInteger answer = binarySearch(BigInteger.ZERO, neededCount, neededCount, true);
 
+        // Search for even next
+        if (answer.equals(BigInteger.ZERO))
+            answer = binarySearch(BigInteger.ZERO, neededCount, neededCount, false);
+
+        // Return the answer
         if (answer.equals(BigInteger.ZERO))
             return "None";
 
@@ -75,10 +118,10 @@ public class Answer {
     }
 
     public static void main(String[] args) {
-//        System.out.println("4 =? " + answer("7"));
-//        System.out.println("None =? " + answer("100"));
-        for (int i = 0; i <= 50; ++i) {
-            System.out.println("getCount("+i+") = " + getCount(BigInteger.valueOf(i)));
-        }
+        System.out.println("4 =? " + answer("7"));
+        System.out.println("None =? " + answer("100"));
+//        for (int i = 0; i <= 50; ++i) {
+//            System.out.println("getCount("+i+") = " + getCount(BigInteger.valueOf(i)));
+//        }
     }
 }
