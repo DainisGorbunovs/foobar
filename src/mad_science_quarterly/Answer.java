@@ -32,27 +32,28 @@ public class Answer {
 
         for (int figureCount = 1; figureCount <= k; ++figureCount) {
             // Keep track of current sum to see if it is higher than max
-            int currentSum = 0;
-
-//            int fromIndex = 0;
-//            int maxIndex = L.length-1;
-//            int toIndex = fromIndex + figureCount - 1;
+            int windowSum = 0;
 
             // Calculate sum for a window of these figures
             for (int windowIndex = 0; windowIndex < figureCount; ++windowIndex) {
-                currentSum += L[windowIndex];
+                windowSum += L[windowIndex];
             }
 
-            if (currentSum > maxConsecutiveSum) {
-                maxConsecutiveSum = currentSum;
+            // This window can be higher than the maximum consecutive sum
+            if (windowSum > maxConsecutiveSum) {
+                maxConsecutiveSum = windowSum;
             }
 
-            for (int fromIndex = 1; fromIndex <= L.length-figureCount; ++fromIndex) {
-//                System.out.println("[figures="+figureCount+"] fromIndex = " + fromIndex + ", toIndex = " + (fromIndex+figureCount-1));
+            // Start sliding this window of figures to find the next window sum
+            for (int fromIndex = 0; fromIndex < L.length-figureCount; ++fromIndex) {
+                // Remove the first element of the previous window
+                windowSum -= L[fromIndex];
 
-                currentSum = currentSum - L[fromIndex-1] + L[fromIndex+figureCount-1];
-                if (currentSum > maxConsecutiveSum) {
-                    maxConsecutiveSum = currentSum;
+                // and append the last element of current window
+                windowSum += L[fromIndex+figureCount];
+                
+                if (windowSum > maxConsecutiveSum) {
+                    maxConsecutiveSum = windowSum;
                 }
             }
 
@@ -65,7 +66,7 @@ public class Answer {
         int[] L = new int[]{-100, 95, 86, 47};
         int k = 3;
         System.out.println(228 + " ?= " + answer(L, k));
-        
+
         L = new int[]{40, 91, -68, -36, 24, -67, -32, -23, -33, -52};
         k = 7;
         System.out.println(131 + " ?= " + answer(L, k));
