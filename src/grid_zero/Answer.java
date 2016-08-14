@@ -44,18 +44,32 @@
 package grid_zero;
 
 public class Answer {
-    private static int[][] flipRow(int[][] matrix, int row) {
-        for (int column = 0; column < matrix.length; ++column) {
-            matrix[row][column] ^= 1;
+//    private static int[][] flipRow(int[][] matrix, int row) {
+//        for (int column = 0; column < matrix.length; ++column) {
+//            matrix[row][column] ^= 1;
+//        }
+//
+//        return matrix;
+//    }
+//
+//    private static int[][] flipColumn(int[][] matrix, int column) {
+//        for (int row = 0; row < matrix[0].length; ++row) {
+//            matrix[row][column] ^= 1;
+//        }
+//
+//        return matrix;
+//    }
+
+    private static int[][] toggleSwitch(int[][] matrix, int row, int column) {
+        for (int otherColumn = 0; otherColumn < matrix.length; ++otherColumn) {
+            matrix[row][otherColumn] ^= 1;
         }
 
-        return matrix;
-    }
-
-    private static int[][] flipColumn(int[][] matrix, int column) {
-        for (int row = 0; row < matrix[0].length; ++row) {
-            matrix[row][column] ^= 1;
+        for (int otherRow = 0; otherRow < matrix[0].length; ++otherRow) {
+            matrix[otherRow][column] ^= 1;
         }
+
+        matrix[row][column] ^= 1;
 
         return matrix;
     }
@@ -74,6 +88,16 @@ public class Answer {
 
     // Returns the minimum number of flips to turn of all lights
     public static int answer(int[][] matrix) {
+        // Can flip 15 columns
+        // Can flip 15 rows
+        // Total of 15*15=225 combinations
+
+        int minFlips = -1;
+//        for (int column = 0; column < matrix.length; ++column) {
+//            for (int row = 0; row < matrix[0].length; ++row) {
+//
+//            }
+//        }
         return 0;
     }
 
@@ -84,5 +108,23 @@ public class Answer {
         };
 
         System.out.println("2 ?= answer(matrix) = " + answer(matrix));
+
+        matrix = new int[][]{
+                {1, 1, 1},
+                {1, 0, 0},
+                {1, 0, 1}
+        };
+
+        System.out.println("-1 ?= answer(matrix) = " + answer(matrix));
     }
 }
+
+/*
+                {1, 1, 1},
+                {1, 0, 0},
+                {1, 0, 1}
+
+                {0, 0, 0},
+                {0, 0, 0},
+                {0, 0, 1}
+ */
