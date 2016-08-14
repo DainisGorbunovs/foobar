@@ -44,6 +44,35 @@
 package grid_zero;
 
 public class Answer {
+    private static int[][] flipRow(int[][] matrix, int row) {
+        for (int column = 0; column < matrix.length; ++column) {
+            matrix[row][column] ^= 1;
+        }
+
+        return matrix;
+    }
+
+    private static int[][] flipColumn(int[][] matrix, int column) {
+        for (int row = 0; row < matrix[0].length; ++row) {
+            matrix[row][column] ^= 1;
+        }
+
+        return matrix;
+    }
+
+    private static boolean isSolved(int[][] matrix) {
+        for (int[] row : matrix) {
+            for (int square : row) {
+                if (square == 1) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    // Returns the minimum number of flips to turn of all lights
     public static int answer(int[][] matrix) {
         return 0;
     }
