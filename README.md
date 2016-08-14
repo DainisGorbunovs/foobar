@@ -24,7 +24,7 @@
 
 ### Level 5
 * [`mad_science_quarterly`](tasks/mad_science_quarterly) time given: 192 hours
-* _another task_
+* [`grid_zero`](tasks/grid_zero) time given: 192 hours
 * _another task_
 * _another task_
 * _another task_
