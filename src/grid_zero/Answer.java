@@ -43,6 +43,8 @@
  */
 package grid_zero;
 
+import java.util.Arrays;
+
 public class Answer {
 //    private static int[][] flipRow(int[][] matrix, int row) {
 //        for (int column = 0; column < matrix.length; ++column) {
@@ -101,6 +103,15 @@ public class Answer {
         return 0;
     }
 
+    private static void printMatrix(int[][] matrix) {
+        for (int[] row : matrix) {
+            for (int square : row) {
+                System.out.print(square + " ");
+            }
+            System.out.println();
+        }
+    }
+
     public static void main(String[] args) {
         int[][] matrix = new int[][]{
                 {1, 1},
@@ -115,16 +126,7 @@ public class Answer {
                 {1, 0, 1}
         };
 
+        printMatrix(matrix);
         System.out.println("-1 ?= answer(matrix) = " + answer(matrix));
     }
 }
-
-/*
-                {1, 1, 1},
-                {1, 0, 0},
-                {1, 0, 1}
-
-                {0, 0, 0},
-                {0, 0, 0},
-                {0, 0, 1}
- */
