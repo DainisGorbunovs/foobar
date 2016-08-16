@@ -76,6 +76,59 @@ public class Answer {
         return matrix;
     }
 
+    private static void printMatrix(int[][] matrix) {
+        for (int[] row : matrix) {
+            for (int square : row) {
+                System.out.print(square + " ");
+            }
+            System.out.println();
+        }
+    }
+
+
+    /*
+        Theory: http://math.stackexchange.com/questions/441571/lights-out-variant-flipping-the-whole-row-and-column
+     */
+    private static boolean isSolvable(int[][] matrix) {
+        // If n is even, there is always a solution given any starting configuration
+        if ((matrix.length & 1) == 0) {
+            return true;
+        }
+
+        // If n is odd, there is a solution iff the 'on' lights parities for each row and column are the same
+        int requiredParity = 0;
+        for (int column = 0; column < matrix.length; ++column) {
+            requiredParity += matrix[0][column];
+        }
+        requiredParity &= 1;
+
+        // Check parity for each row
+        for (int row = 0; row < matrix[0].length; ++row) {
+            int parity = 0;
+            for (int column = 1; column < matrix.length; ++column) {
+                parity += matrix[row][column];
+            }
+            parity &= 1;
+            if (requiredParity != parity) {
+                return false;
+            }
+        }
+
+        // Check parity for each column
+        for (int column = 0; column < matrix[0].length; ++column) {
+            int parity = 0;
+            for (int row = 1; row < matrix.length; ++row) {
+                parity += matrix[row][column];
+            }
+            parity &= 1;
+            if (requiredParity != parity) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private static boolean isSolved(int[][] matrix) {
         for (int[] row : matrix) {
             for (int square : row) {
@@ -90,34 +143,25 @@ public class Answer {
 
     // Returns the minimum number of flips to turn of all lights
     public static int answer(int[][] matrix) {
-        // Can flip 15 columns
-        // Can flip 15 rows
-        // Total of 15*15=225 combinations
+        if (!isSolvable(matrix)) {
+            return -1;
+        }
 
-        int minFlips = -1;
-//        for (int column = 0; column < matrix.length; ++column) {
-//            for (int row = 0; row < matrix[0].length; ++row) {
-//
-//            }
-//        }
         return 0;
     }
 
-    private static void printMatrix(int[][] matrix) {
-        for (int[] row : matrix) {
-            for (int square : row) {
-                System.out.print(square + " ");
-            }
-            System.out.println();
-        }
-    }
-
     public static void main(String[] args) {
+
         int[][] matrix = new int[][]{
                 {1, 1},
                 {0, 0}
         };
 
+        toggleSwitch(matrix, 1-1, 2-1);
+        toggleSwitch(matrix, 1-1, 1-1);
+        toggleSwitch(matrix, 2-1, 1-1);
+
+        printMatrix(matrix);
         System.out.println("2 ?= answer(matrix) = " + answer(matrix));
 
         matrix = new int[][]{
@@ -125,8 +169,19 @@ public class Answer {
                 {1, 0, 0},
                 {1, 0, 1}
         };
-
-        printMatrix(matrix);
-        System.out.println("-1 ?= answer(matrix) = " + answer(matrix));
+        System.out.println("isSolvable(matrix) = " + isSolvable(matrix));
+//        System.out.println("-1 ?= answer(matrix) = " + answer(matrix));
     }
 }
+/*
+?,?: 0,0 + 0,1 + 0,2 + 1,0 + 1,1 + 1,2 + 2,0 + 2,1 + 2,2 |  b
+0,0:  1     1     1     1                 1                 1
+0,1:  1     1     1           1                 1           1
+0,2:  1     1     1                 1                 1     1
+1,0:  1                 1     1     1     1                 1
+1,1:        1           1     1     1           1           0
+1,2:              1     1     1     1                 1     0
+2,0:  1                 1                 1     1     1     1
+2,1:        1                 1           1     1     1     0
+2,2:              1                 1     1     1     1     1
+*/
