@@ -76,6 +76,18 @@ public class Answer {
         return matrix;
     }
 
+    private static boolean isSolved(int[][] matrix) {
+        for (int[] row : matrix) {
+            for (int square : row) {
+                if (square == 1) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     private static void printMatrix(int[][] matrix) {
         for (int[] row : matrix) {
             for (int square : row) {
@@ -129,23 +141,35 @@ public class Answer {
         return true;
     }
 
-    private static boolean isSolved(int[][] matrix) {
-        for (int[] row : matrix) {
-            for (int square : row) {
-                if (square == 1) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     // Returns the minimum number of flips to turn of all lights
     public static int answer(int[][] matrix) {
+        // If not solvable, return -1
         if (!isSolvable(matrix)) {
             return -1;
         }
+
+        // If even matrix
+        if ((matrix.length & 1) == 0) {
+            int[] rowSum = new int[matrix[0].length];
+            int[] columnSum = new int[matrix.length];
+
+            for (int row = 0; row < rowSum.length; ++row) {
+                for (int column = 0; column < columnSum.length; ++column) {
+                    rowSum[row] += matrix[row][column];
+                    columnSum[column] += matrix[row][column];
+                }
+            }
+
+            int paritySum = 0;
+            for (int row = 0; row < rowSum.length; ++row) {
+                for (int column = 0; column < columnSum.length; ++column) {
+                    paritySum += (rowSum[row] + columnSum[column] - matrix[row][column]) & 1;
+                }
+            }
+            return paritySum;
+        }
+
+        // Else if odd matrix
 
         return 0;
     }
@@ -164,13 +188,29 @@ public class Answer {
         printMatrix(matrix);
         System.out.println("2 ?= answer(matrix) = " + answer(matrix));
 
+//        matrix = new int[][]{
+//                {1, 1, 1},
+//                {1, 0, 0},
+//                {1, 0, 1}
+//        };
+
         matrix = new int[][]{
-                {1, 1, 1},
-                {1, 0, 0},
-                {1, 0, 1}
+                {1, 1, 0, 1},
+                {0, 1, 1, 1},
+                {1, 0, 1, 0},
+                {1, 0, 1, 0}
         };
+
+//        toggleSwitch(matrix, 0, 0);
+//        toggleSwitch(matrix, 0, 1);
+//        toggleSwitch(matrix, 0, 2);
+//        toggleSwitch(matrix, 0, 3);
+//        toggleSwitch(matrix, 1, 0);
+//        toggleSwitch(matrix, 2, 0);
+//        toggleSwitch(matrix, 3, 0);
+//        printMatrix(matrix);
         System.out.println("isSolvable(matrix) = " + isSolvable(matrix));
-//        System.out.println("-1 ?= answer(matrix) = " + answer(matrix));
+        System.out.println("-1 ?= answer(matrix) = " + answer(matrix));
     }
 }
 /*
