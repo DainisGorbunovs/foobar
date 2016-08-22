@@ -46,48 +46,6 @@ package grid_zero;
 import java.util.Arrays;
 
 public class Answer {
-//    private static int[][] flipRow(int[][] matrix, int row) {
-//        for (int column = 0; column < matrix.length; ++column) {
-//            matrix[row][column] ^= 1;
-//        }
-//
-//        return matrix;
-//    }
-//
-//    private static int[][] flipColumn(int[][] matrix, int column) {
-//        for (int row = 0; row < matrix[0].length; ++row) {
-//            matrix[row][column] ^= 1;
-//        }
-//
-//        return matrix;
-//    }
-
-    private static int[][] toggleSwitch(int[][] matrix, int row, int column) {
-        for (int otherColumn = 0; otherColumn < matrix.length; ++otherColumn) {
-            matrix[row][otherColumn] ^= 1;
-        }
-
-        for (int otherRow = 0; otherRow < matrix[0].length; ++otherRow) {
-            matrix[otherRow][column] ^= 1;
-        }
-
-        matrix[row][column] ^= 1;
-
-        return matrix;
-    }
-
-    private static boolean isSolved(int[][] matrix) {
-        for (int[] row : matrix) {
-            for (int square : row) {
-                if (square == 1) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     private static void printMatrix(int[][] matrix) {
         for (int[] row : matrix) {
             for (int square : row) {
@@ -117,7 +75,7 @@ public class Answer {
         // Check parity for each row
         for (int row = 0; row < matrix[0].length; ++row) {
             int parity = 0;
-            for (int column = 1; column < matrix.length; ++column) {
+            for (int column = 0; column < matrix.length; ++column) {
                 parity += matrix[row][column];
             }
             parity &= 1;
@@ -129,7 +87,7 @@ public class Answer {
         // Check parity for each column
         for (int column = 0; column < matrix[0].length; ++column) {
             int parity = 0;
-            for (int row = 1; row < matrix.length; ++row) {
+            for (int row = 0; row < matrix.length; ++row) {
                 parity += matrix[row][column];
             }
             parity &= 1;
@@ -141,6 +99,35 @@ public class Answer {
         return true;
     }
 
+    private static int[][] getRowColumnSums(int[][] matrix) {
+        int[][] rowColSums = new int[2][];
+
+        int[] rowSum = new int[matrix.length];
+        int[] columnSum = new int[matrix.length];
+
+        for (int row = 0; row < rowSum.length; ++row) {
+            for (int column = 0; column < columnSum.length; ++column) {
+                rowSum[row] += matrix[row][column];
+                columnSum[column] += matrix[row][column];
+            }
+        }
+
+        rowColSums[0] = rowSum;
+        rowColSums[1] = columnSum;
+
+        return rowColSums;
+    }
+
+    private static int findParitySum(int[][] matrix, int[] rowSum, int[] columnSum) {
+        int paritySum = 0;
+        for (int row = 0; row < rowSum.length; ++row) {
+            for (int column = 0; column < columnSum.length; ++column) {
+                paritySum += (rowSum[row] + columnSum[column] - matrix[row][column]) & 1;
+            }
+        }
+        return paritySum;
+    }
+
     // Returns the minimum number of flips to turn of all lights
     public static int answer(int[][] matrix) {
         // If not solvable, return -1
@@ -148,80 +135,139 @@ public class Answer {
             return -1;
         }
 
+        int matrixSize = matrix.length;
+
+        // Find sums and parity
+        int[][] rowColumnSum = getRowColumnSums(matrix);
+        int[] rowSum = rowColumnSum[0];
+        int[] columnSum = rowColumnSum[1];
+
         // If even matrix
-        if ((matrix.length & 1) == 0) {
-            int[] rowSum = new int[matrix[0].length];
-            int[] columnSum = new int[matrix.length];
-
-            for (int row = 0; row < rowSum.length; ++row) {
-                for (int column = 0; column < columnSum.length; ++column) {
-                    rowSum[row] += matrix[row][column];
-                    columnSum[column] += matrix[row][column];
-                }
-            }
-
-            int paritySum = 0;
-            for (int row = 0; row < rowSum.length; ++row) {
-                for (int column = 0; column < columnSum.length; ++column) {
-                    paritySum += (rowSum[row] + columnSum[column] - matrix[row][column]) & 1;
-                }
-            }
-            return paritySum;
+        if ((matrixSize & 1) == 0) {
+            return findParitySum(matrix, rowSum, columnSum);
         }
 
         // Else if odd matrix
+        // Add a new column to make it an even matrix
+        for (int row = 0; row < matrixSize; ++row) {
+            matrix[row] = Arrays.copyOf(matrix[row], matrixSize + 1);
+        }
 
-        return 0;
+        // Add a new row to make it completely even
+        matrix = Arrays.copyOf(matrix, matrixSize + 1);
+        matrix[matrixSize] = new int[matrixSize+1];
+        columnSum = Arrays.copyOf(columnSum, columnSum.length + 1);
+        rowSum = Arrays.copyOf(rowSum, rowSum.length + 1);
+
+        int result = Integer.MAX_VALUE;
+        for (int permutation = 0; permutation < Math.pow(2, matrixSize); ++permutation) {
+            int[] combination = new int[matrixSize + 1];
+            int combinationSum = 0;
+
+            // Generate a combination using current permutation cycle
+            for (int row = 0; row < matrixSize; ++row) {
+//                combination[row] = (permutation >> row) & 1;
+                combination[row] = (permutation >> (matrixSize - 1 - row)) & 1;
+                combinationSum += combination[row];
+            }
+
+
+            // If parity does not match, then it does not lead to the solution
+            if ((combinationSum & 1) != (rowSum[0] & 1)) {
+                continue;
+            }
+
+            // Amend column sums with the new matrix column's values
+            for (int column = 0; column < matrixSize; ++column) {
+                columnSum[column] += combination[column];
+            }
+
+            // Values of column padding
+            for (int row = 0; row < matrixSize; ++row) {
+                int F = 0;
+                for (int column = 0; column < matrixSize; ++column) {
+                    F += (rowSum[row] + columnSum[column] - matrix[row][column]) & 1;
+                }
+
+                if (F > matrixSize >> 1) {
+                    matrix[row][matrixSize] = 1;
+                    ++rowSum[row];
+                    ++columnSum[matrixSize];
+                } else {
+                    matrix[row][matrixSize] = 0;
+                }
+            }
+
+            // Add the row candidate
+            matrix[matrixSize] = Arrays.copyOf(combination, matrixSize+1);
+
+            rowSum[matrixSize] = 0;
+            for (int column = 0; column < matrixSize; ++column) {
+                rowSum[matrixSize] += combination[column];
+            }
+
+            int candidate = findParitySum(matrix, rowSum, columnSum);
+
+            if (candidate < result) {
+                result = candidate;
+            }
+
+            // Return column sums back for next permutation
+            for (int index = 0; index < matrixSize; ++index) {
+                rowSum[index] -= matrix[index][matrixSize];
+                columnSum[index] -= matrix[matrixSize][index];
+            }
+
+            // Reset last row of matrix
+            for (int column = 0; column < matrix.length; ++column) {
+                matrix[matrixSize][column] = 0;
+            }
+
+            // Sums reset to zero
+            rowSum[matrixSize] = 0;
+            columnSum[matrixSize] = 0;
+        }
+
+        return result;
     }
+
+//    private static int[][] toggleSwitch(int[][] matrix, int row, int column) {
+//        for (int otherColumn = 0; otherColumn < matrix.length; ++otherColumn) {
+//            matrix[row][otherColumn] ^= 1;
+//        }
+//
+//        for (int otherRow = 0; otherRow < matrix[0].length; ++otherRow) {
+//            matrix[otherRow][column] ^= 1;
+//        }
+//
+//        matrix[row][column] ^= 1;
+//
+//        return matrix;
+//    }
 
     public static void main(String[] args) {
 
         int[][] matrix = new int[][]{
-                {1, 1},
-                {0, 0}
+                {0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1},
+                {0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1},
+                {0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0},
+                {1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1},
+                {1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0},
+                {1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0},
+                {1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1},
+                {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0},
+                {0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1},
+                {0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1},
+                {0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1},
+                {1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0},
+                {1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0},
+                {1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0},
+                {0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1}
         };
 
-        toggleSwitch(matrix, 1-1, 2-1);
-        toggleSwitch(matrix, 1-1, 1-1);
-        toggleSwitch(matrix, 2-1, 1-1);
-
-        printMatrix(matrix);
-        System.out.println("2 ?= answer(matrix) = " + answer(matrix));
-
-//        matrix = new int[][]{
-//                {1, 1, 1},
-//                {1, 0, 0},
-//                {1, 0, 1}
-//        };
-
-        matrix = new int[][]{
-                {1, 1, 0, 1},
-                {0, 1, 1, 1},
-                {1, 0, 1, 0},
-                {1, 0, 1, 0}
-        };
-
-//        toggleSwitch(matrix, 0, 0);
-//        toggleSwitch(matrix, 0, 1);
-//        toggleSwitch(matrix, 0, 2);
-//        toggleSwitch(matrix, 0, 3);
-//        toggleSwitch(matrix, 1, 0);
-//        toggleSwitch(matrix, 2, 0);
-//        toggleSwitch(matrix, 3, 0);
 //        printMatrix(matrix);
-        System.out.println("isSolvable(matrix) = " + isSolvable(matrix));
+//        System.out.println("Solving: ");
+//        System.out.println("isSolvable(matrix) = " + isSolvable(matrix));
         System.out.println("-1 ?= answer(matrix) = " + answer(matrix));
     }
 }
-/*
-?,?: 0,0 + 0,1 + 0,2 + 1,0 + 1,1 + 1,2 + 2,0 + 2,1 + 2,2 |  b
-0,0:  1     1     1     1                 1                 1
-0,1:  1     1     1           1                 1           1
-0,2:  1     1     1                 1                 1     1
-1,0:  1                 1     1     1     1                 1
-1,1:        1           1     1     1           1           0
-1,2:              1     1     1     1                 1     0
-2,0:  1                 1                 1     1     1     1
-2,1:        1                 1           1     1     1     0
-2,2:              1                 1     1     1     1     1
-*/
