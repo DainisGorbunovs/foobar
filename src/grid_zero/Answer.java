@@ -184,12 +184,14 @@ public class Answer {
 
             // Values of column padding
             for (int row = 0; row < matrixSize; ++row) {
-                int F = 0;
+                int rowParitySum = 0;
                 for (int column = 0; column < matrixSize; ++column) {
-                    F += (rowSum[row] + columnSum[column] - matrix[row][column]) & 1;
+                    rowParitySum += (rowSum[row] + columnSum[column] - matrix[row][column]) & 1;
                 }
 
-                if (F > matrixSize >> 1) {
+                // If there are more ones than zeros in row parity sum,
+                // row will be flipped, set so we don't have to switch the padded point
+                if (rowParitySum > matrixSize >> 1) {
                     matrix[row][matrixSize] = 1;
                     ++rowSum[row];
                     ++columnSum[matrixSize];
