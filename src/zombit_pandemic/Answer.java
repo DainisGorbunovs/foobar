@@ -43,18 +43,23 @@ import java.util.*;
 public class Answer {
     private static Map<Integer, Set<ArrayList<Integer>>> partitionMemo = new HashMap<Integer, Set<ArrayList<Integer>>>();
     private static Set<ArrayList<Integer>> getPartitions(int n) {
+        // Check if partitions are memoized for n
         if (partitionMemo.containsKey(n)) {
             return partitionMemo.get(n);
         }
 
         Set<ArrayList<Integer>> partitions = new HashSet<ArrayList<Integer>>();
 
+        // Find partitions for n
         partition(n, n, partitions, new ArrayList<Integer>());
 
+        // Memoize the partitions for the n
         partitionMemo.put(n, partitions);
         return partitions;
     }
 
+    // Recursive integer partition algorithm
+    // Reference: http://stackoverflow.com/questions/23068368/recursive-method-for-the-integer-partition-algorithm
     private static void partition(int n, int max, Set<ArrayList<Integer>> partitions, ArrayList<Integer> partition) {
         if (n == 0) {
             if (!partition.contains(1)) {
@@ -62,6 +67,7 @@ public class Answer {
             }
             return;
         }
+
         for (int i = Math.min(max, n); i >= 1; --i) {
             partition.add(i);
             partition(n - i, i, partitions, partition);
@@ -70,7 +76,11 @@ public class Answer {
     }
 
     private static Map<Integer, BigInteger> arrangementMemo = new HashMap<Integer, BigInteger>();
+    // Number of n node pseudoforests with exactly one connected component
+    // Reference:
+    // http://math.stackexchange.com/questions/1090498/how-to-calculate-the-expected-maximum-tree-size-in-a-pseudoforest
     private static BigInteger getNumberOfArrangements(int n) {
+        // Check if memoized
         if (arrangementMemo.containsKey(n)) {
             return arrangementMemo.get(n);
         }
@@ -90,10 +100,44 @@ public class Answer {
 
         arrangements = arrangements.divide(BigInteger.valueOf(n));
 
+        // Memoize the number of arrangements for n
         arrangementMemo.put(n, arrangements);
         return arrangements;
     }
 
+    // Number of ways to split n rabbits into partition p
+    // Reference:
+    // http://math.stackexchange.com/questions/1090498/how-to-calculate-the-expected-maximum-tree-size-in-a-pseudoforest
+    private static BigInteger getNumberOfSplits(int n, ArrayList<Integer> partition) {
+        Map<Integer, Integer> multiplicities = new HashMap<Integer, Integer>();
+        BigInteger numerator = BigInteger.ONE;
+        int sum = 0;
+
+        // The sizes of the partition lets find the number of ways of
+        // splitting n labelled nodes into connected components
+        for (int number : partition) {
+            numerator = numerator.multiply(
+                    getBinomialCoefficient(n-sum, number)
+            );
+            sum += number;
+
+            if (!multiplicities.containsKey(number)) {
+                multiplicities.put(number, 0);
+            }
+
+            multiplicities.put(number, multiplicities.get(number) + 1);
+        }
+
+        BigInteger denominator = BigInteger.ONE;
+        for (Integer key : multiplicities.keySet()) {
+            denominator = denominator
+                    .multiply(
+                            factorial(multiplicities.get(key))
+                    );
+        }
+
+        return numerator.divide(denominator);
+    }
 
     static Map<List<Integer>, BigInteger> coefficientMemo = new HashMap<List<Integer>, BigInteger>();
     private static BigInteger getBinomialCoefficient(int n, int k) {
@@ -128,52 +172,29 @@ public class Answer {
 
     static Map<Integer, BigInteger> factorialMemo = new HashMap<Integer, BigInteger>();
     private static BigInteger factorial(int n) {
-        if (n == 1) {
-            return BigInteger.ONE;
-        }
-
+        // Check if memoized
         if (factorialMemo.containsKey(n)) {
             return factorialMemo.get(n);
         }
 
+        // Base case
+        if (n == 1) {
+            return BigInteger.ONE;
+        }
+
+        // Step case
         BigInteger factorial = BigInteger.valueOf(n)
                 .multiply(factorial(n - 1));
 
+        // Memoize the factoriayl
         factorialMemo.put(n, factorial);
 
         return factorial;
     }
 
-    private static BigInteger getNumberOfSplits(int n, ArrayList<Integer> partition) {
-        Map<Integer, Integer> multiplicities = new HashMap<Integer, Integer>();
-        BigInteger numerator = BigInteger.ONE;
-        int sum = 0;
-
-        for (int number : partition) {
-            numerator = numerator.multiply(
-                    getBinomialCoefficient(n-sum, number)
-            );
-            sum += number;
-
-            if (!multiplicities.containsKey(number)) {
-                multiplicities.put(number, 0);
-            }
-
-            multiplicities.put(number, multiplicities.get(number) + 1);
-        }
-
-        BigInteger denominator = BigInteger.ONE;
-        for (Integer key : multiplicities.keySet()) {
-            denominator = denominator
-                    .multiply(
-                            factorial(multiplicities.get(key))
-                    );
-        }
-
-        return numerator.divide(denominator);
-    }
-
     static Map<Integer, BigInteger> numeratorMemo = new HashMap<Integer, BigInteger>();
+    // Reference:
+    // http://math.stackexchange.com/questions/1090498/how-to-calculate-the-expected-maximum-tree-size-in-a-pseudoforest
     private static BigInteger getNumerator(int n) {
         if (numeratorMemo.containsKey(n)) {
             return numeratorMemo.get(n);
