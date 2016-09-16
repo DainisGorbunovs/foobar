@@ -26,5 +26,5 @@
 * [`mad_science_quarterly`](tasks/mad_science_quarterly) time given: 192 hours
 * [`grid_zero`](tasks/grid_zero) time given: 192 hours
 * [`zombit_pandemic`](tasks/zombit_pandemic) time given: 192 hours
-* _another task_
+* [`dont_mind_the_map`](tasks/dont_mind_the_map) time given: 528 hours
 * _another task_
