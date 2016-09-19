@@ -67,6 +67,14 @@ public class AnswerTest {
         });
     }
 
+    @Test
+    public void caseETest() {
+        Assert.assertEquals(0, new int[][] {
+                {2, 3, 0},
+                {2, 4, 1}
+        });
+    }
+
     /*
     subway[station][direction]
     3; answer is -2, if even with closing 1 station, there is no meeting path
@@ -124,17 +132,17 @@ public class AnswerTest {
         17: 15,
         18: 19,
         19: 20,
-        20: 18, 
-        21:
-        22:
-        23:
-        24:
-        25:
-        26:
-        27:
-        28:
-        29:
-        30:
+        20: 18,
+        21: 22,
+        22: 23,
+        23: 21,
+        24: 25,
+        25: 26,
+        26: 24,
+        27: 28,
+        28: 29,
+        29: 27,
+        30: 31, 
         31:
         32:
         33:
