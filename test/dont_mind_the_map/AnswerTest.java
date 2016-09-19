@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class AnswerTest {
     @Test
-    public void caseAtest() {
+    public void caseATest() {
         Assert.assertEquals(-1, new int[][] {
                 {2, 1},
                 {2, 0},
@@ -15,7 +15,7 @@ public class AnswerTest {
     }
 
     @Test
-    public void caseBtest() {
+    public void caseBTest() {
         Assert.assertEquals(1, new int[][] {
                 {1, 2},
                 {1, 1},
@@ -24,7 +24,19 @@ public class AnswerTest {
     }
 
     @Test
-    public void case4test() {
+    public void caseCTest() {
+        Assert.assertEquals(-2, new int[][] {
+                {0, 1, 2},
+                {1, 2, 0},
+                {2, 0, 1},
+                {3, 4, 5},
+                {4, 5, 3},
+                {5, 3, 4}
+        });
+    }
+
+    @Test
+    public void caseDTest() {
         Assert.assertEquals(-1, new int[][] {
                 {1, 2},
                 {2, 2},
@@ -57,6 +69,13 @@ public class AnswerTest {
 
     /*
     subway[station][direction]
+    3; answer is -2, if even with closing 1 station, there is no meeting path
+        0: 0, 1 and 2
+        1: 1, 2 and 0
+        2: 2, 0 and 1
+        3: 3, 4 and 5
+        4: 4, 5 and 3
+        5: 5, 3 and 4
     4: answer is -1, there are two directions from each station
          0: 1 and 2
          1: 2 and 2
@@ -85,27 +104,27 @@ public class AnswerTest {
         24: 25 and 25
         25: 0 and 0
     5: answer is 0, there are three directions from each station
-         0: 2, 3 and 0
-         1: 2, 4 and 1
-         2: 0, 5 and 2
-         3: 4, 6 and 3
-         4: 5, 7 and 4
-         5: 3, 8 and 5
-         6: 7, 9 and 6
-         7: 8, 10 and 7
-         8:
-         9:
-        10:
-        11:
-        12:
-        13:
-        14:
-        15:
-        16:
-        17:
-        18:
-        19:
-        20:
+         0:  2,  3 and  0
+         1:  2,  4 and  1
+         2:  0,  5 and  2
+         3:  4,  6 and  3
+         4:  5,  7 and  4
+         5:  3,  8 and  5
+         6:  7,  9 and  6
+         7:  8, 10 and  7
+         8:  6, 11 and  8
+         9: 10, 12 and  9
+        10: 11, 13 and 10
+        11:  9, 14 and 11
+        12: 13,
+        13: 14,
+        14: 12,
+        15: 16,
+        16: 17,
+        17: 15,
+        18: 19,
+        19: 20,
+        20: 18, 
         21:
         22:
         23:
