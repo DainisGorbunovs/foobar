@@ -41,7 +41,7 @@
     Write a function answer(subway) that returns one of:
 
     -1 (minus one): If there is a meeting path without closing a station
-    The least index of the station to close that allows for a meeting path or
+    The least index of the station to close: that allows for a meeting path or
     -2 (minus two): If even with closing 1 station, there is no meeting path.
     subway will be a list of lists of integers such that subway[station][direction] = destination_station.
 
@@ -57,7 +57,12 @@
     There will be at least 1 and no more than 50 stations.
 
     For example, if
-    subway = [[2, 1], [2, 0], [3, 1], [1, 0]]
+    subway = [
+        [2, 1], // 0 station
+        [2, 0], // 1 station
+        [3, 1], // 2 station
+        [1, 0]  // 3 station
+    ]
     Then one could take the path [1, 0]. That is, from the starting station, take the second direction, then the
     first. If the first direction was the red line, and the second was the green line, you could phrase this as:
     if you are lost, take the green line for 1 stop, then the red line for 1 stop.
@@ -87,9 +92,34 @@
 package dont_mind_the_map;
 
 public class Answer {
+    private static boolean isMeetingPath(int[][] subway, int[] path) {
+        return false;
+    }
+
+    private static boolean hasMeetingPath(int[][] subway) {
+        return false;
+    }
+
+    private static int[][] subwayWithClosedStation(int[][] subway, int station) {
+        return subway;
+    }
+
     public static int answer(int[][] subway) {
-//        return -1; // If there is a meeting path without closing a station
-        return -2; // If even with closing 1 station, there is no meeting path.
+        // If there is a meeting path without closing a station
+        if (hasMeetingPath(subway)) {
+            return -1;
+        }
+
+        // If closing a station, there is a meeting path
+        for (int station = 0; station < subway.length; ++station) {
+            // Close this station
+            if (hasMeetingPath(subwayWithClosedStation(subway, station))) {
+                return station;
+            }
+        }
+
+        // If even with closing 1 station, there is no meeting path.
+        return -2;
     }
 
     public static void main(String[] args) {
