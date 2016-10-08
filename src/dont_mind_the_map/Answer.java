@@ -104,10 +104,6 @@ public class Answer {
       2. Check backwards, has to access all other stations
         0: from 1 (from 2 or 0) or 3 (from 1 or 0)
      */
-    @Deprecated
-    private static boolean isMeetingPath(int[][] subway, int[] path) {
-        return false;
-    }
 
     /*
       Return a list of stations which lead towards the toStation
@@ -165,17 +161,37 @@ public class Answer {
         return result;
     }
 
+    private static Set<Integer> missingStations = new HashSet<Integer>();
+
     private static boolean hasMeetingPath(int[][] subway) {
+        System.out.println();
         Set<Integer> travels = travelPathRecursively(subway, new HashSet<Integer>(), 0);
-        System.out.println("NEW");
-        printArray(subway);
-        printDescriptions(subway);
+        System.out.println("Final travel size: " + travels.size() + ", subway length: " + subway.length);
+        for (Integer pt : travels) {
+            if (missingStations.contains(pt)) {
+                missingStations.remove(pt);
+            }
+        }
+        if (missingStations.size() != 0) {
+            travels = travelPathRecursively(subway, new HashSet<Integer>(), 1);
+            for (Integer pt : travels) {
+                if (missingStations.contains(pt)) {
+                    missingStations.remove(pt);
+                }
+            }
+            System.out.println(missingStations);
+        }
+
+//        return missingStations.size() == 0;
         return travels.size() == subway.length;
     }
 
     // Remove station 2
-    private static int[][] subwayWithClosedStation(int[][] subway, int station) {
+    private static int[][] subwayWithClosedStation(int[][] subwaye, int station) {
+        int[][] subway = getCopyOf2DArray(subwaye);
         for (Integer fromStation : findFromStations(subway, station)) {
+            // Go to station 1, first line can continue to station 2's direction
+            // second line is the same, so it goes back to station 0's direction
             for (int line = 0; line < subway[fromStation].length; ++line) {
                 // If the line sends to the closed station, change things
                 if (subway[fromStation][line] == station) {
@@ -185,9 +201,9 @@ public class Answer {
 //                        System.out.printf("Subway[%d][%d] == %d, not equal to %d\n", fromStation, line, subway[station][line], station);
                         subway[fromStation][line] = subway[station][line];
                     } else {
-                        LinkedHashSet<Integer> precedingStations = findFromStationsOnLine(subway, fromStation, (line+1)%3);
+                        LinkedHashSet<Integer> precedingStations = findFromStationsOnLine(subway, fromStation, line);
                         if (!precedingStations.iterator().hasNext()) {
-                            subway[fromStation][line] = subway[fromStation][(line+1)%3];
+                            subway[fromStation][line] = subway[fromStation][line    ];
 //                            continue;
 //                            System.out.println("FAIL @ from station " + fromStation + ", at line " + (line^1));
                         } else {
@@ -202,32 +218,18 @@ public class Answer {
                 }
 
             }
-            // Go to station 1, first line can continue to station 2's direction
-            // second line is the same, so it goes back to station 0's direction
-
-            // Go to station 2, do nothing
-
-            // Remove station 2
-            // After station 2, decrease values for all stations
-
-            /*
-                0 <- 2,
-                1 <- 0,
-                2 <- 1, 2,
-             */
-            /*
-                subway = [
-                    [1,1], // 0 station
-                    [0,2], // 1 station
-                    [0,2]  // 2 station
-                ]
-             */
         }
+
+        // Remove station 2
         int[][] resizedSubway = new int[subway.length - 1][subway[0].length];
+        for (int stationIndex = 0; stationIndex < station; ++stationIndex) {
+            resizedSubway[stationIndex] = Arrays.copyOf(subway[stationIndex], subway[stationIndex].length);
+        }
+        for (int stationIndex = station+1; stationIndex < subway.length; ++stationIndex) {
+            resizedSubway[stationIndex-1] = Arrays.copyOf(subway[stationIndex], subway[stationIndex].length);
+        }
 
-        System.arraycopy(subway, 0, resizedSubway, 0, station);
-        System.arraycopy(subway, station+1, resizedSubway, station, subway.length - station - 1);
-
+        // After station 2, decrease values for all stations
         for (int parsedStation = 0; parsedStation < resizedSubway.length; ++parsedStation) {
             for (int parsedLine = 0; parsedLine < subway[0].length; ++parsedLine) {
                 if (resizedSubway[parsedStation][parsedLine] >= station) {
@@ -241,6 +243,11 @@ public class Answer {
     }
 
     public static int answer(int[][] subway) {
+        missingStations = new HashSet<Integer>();
+        for (int station = 0; station < subway.length; ++station) {
+            missingStations.add(station);
+        }
+
         // If there is a meeting path without closing a station
         if (hasMeetingPath(subway)) {
             return -1;
@@ -248,10 +255,10 @@ public class Answer {
 
         // If closing a station, there is a meeting path
         for (int station = 0; station < subway.length; ++station) {
+            System.out.println("Station : " + station);
             // Close this station
-//            closedStation = station;
             if (hasMeetingPath(subwayWithClosedStation(subway, station))) {
-//            if (hasMeetingPath(subway)) {
+                System.out.println("Trying station #" + station);
                 return station;
             }
         }
@@ -280,115 +287,21 @@ public class Answer {
         }
     }
 
+    private static int[][] getCopyOf2DArray(int[][] subway) {
+        int[][] copy = new int[subway.length][subway[0].length];
+        for (int station = 0; station < copy.length; ++station) {
+            copy[station] = Arrays.copyOf(subway[station], subway[station].length);
+        }
+        return copy;
+    }
+
     public static void main(String[] args) {
-//        int[][] subway = new int[][] {
-//                {0, 1, 2},
-//                {1, 2, 0},
-//                {2, 0, 1},
-//                {3, 4, 5},
-//                {4, 5, 3},
-//                {5, 3, 4}
-//        };
-//        subway = subwayWithClosedStation(subway, 1);
-//        subway = subwayWithClosedStation(subway, 2);
         int[][] subway = new int[][] {
-                {0, 1, 1},
-                {1, 0, 0},
-                {2, 3, 3},
-                {3, 2, 2}
+                {1, 2},
+                {1, 1},
+                {2, 2}
         };
 
-//        printArray(subway);
-//        if (true) return;
-
-        printDescriptions(subway);
-//        if (true) return;
-        // 1 and then 0
-        // 0: 2
-        // 1: 2
-
-        // BFS
-        // 2 is final destination
-        // get here from 0 or 1
-        // total: 0, 1
-
-        // 0 is new final destination
-        // get here from 1 or 3
-        // 1 is new final destination
-        // get here from 0 or 2 or 3
-        // total 0, 1, 2, 3
-
-
-        /*
-            0 <- 1, 3,
-            1 <- 0, 2, 3,
-            2 <- 0, 1,
-            3 <- 2,
-         */
-        /*
-            0 <- 1, 3,
-            1 <- 0, 2, 3,
-            2 <- 0(1, 3), 1(0,2,3),
-            3 <- 2(0(1, 3), 1(0,2,3)),
-         */
-
-        /*
-            0 <- 25,
-            1 <- 0,
-            2 <- 0, 1,
-            3 <- 2,
-            4 <- 3,
-            5 <- 4,
-            6 <- 5,
-            7 <- 6,
-            8 <- 7,
-            9 <- 8,
-            10 <- 9,
-            11 <- 10,
-            12 <- 11,
-            13 <- 12,
-            14 <- 13,
-            15 <- 14,
-            16 <- 15,
-            17 <- 16,
-            18 <- 17,
-            19 <- 18,
-            20 <- 19,
-            21 <- 20,
-            22 <- 21,
-            23 <- 22,
-            24 <- 23,
-            25 <- 24,
-
-
-            0 <- 25,
-            1 <- 0,
-            2 <- 0, 1,
-            3 <- 2,
-            4 <- 3,
-            5 <- 4,
-            6 <- 5,
-            7 <- 6,
-            8 <- 7,
-            9 <- 8,
-            10 <- 9,
-            11 <- 10,
-            12 <- 11,
-            13 <- 12,
-            14 <- 13,
-            15 <- 14,
-            16 <- 15,
-            17 <- 16,
-            18 <- 17,
-            19 <- 18,
-            20 <- 19,
-            21 <- 20,
-            22 <- 21,
-            23 <- 22,
-            24 <- 23,
-            25 <- 24 (23(22(21(20(19(18(17(16(15(14(13(12(11(10(9(8(7(6(5(4(3(2(0(25), 1(0))))))))))))))))))))))),
-         */
         System.out.println("-1 ?= answer(subway) = " + answer(subway));
-//        System.out.println("-1 ?= answer(subway) = " + answer(subwayWithClosedStation(subway, 1)));
     }
 }
