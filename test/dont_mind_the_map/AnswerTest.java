@@ -7,10 +7,10 @@ public class AnswerTest {
     @Test
     public void caseATest() {
         Assert.assertEquals(-1, new int[][] {
-                {2, 1},
-                {2, 0},
-                {3, 1},
-                {1, 0}
+                {2, 1}, // 0 station
+                {2, 0}, // 1 station
+                {3, 1}, // 2 station
+                {1, 0} //  3 station
         });
     }
 
@@ -38,32 +38,32 @@ public class AnswerTest {
     @Test
     public void caseDTest() {
         Assert.assertEquals(-1, new int[][] {
-                {1, 2},
-                {2, 2},
-                {3, 3},
-                {4, 4},
-                {5, 5},
-                {6, 6},
-                {7, 7},
-                {8, 8},
-                {9, 9},
-                {10, 10},
-                {11, 11},
-                {12, 12},
-                {13, 13},
-                {14, 14},
-                {15, 15},
-                {16, 16},
-                {17, 17},
-                {18, 18},
-                {19, 19},
-                {20, 20},
-                {21, 21},
-                {22, 22},
-                {23, 23},
-                {24, 24},
-                {25, 25},
-                {0, 0}
+                {1, 2}, // 0 station
+                {2, 2}, // 1 station
+                {3, 3}, // 2 station
+                {4, 4}, // 3 station
+                {5, 5}, // 4 station
+                {6, 6}, // 5 station
+                {7, 7}, // 6 station
+                {8, 8}, // 7 station
+                {9, 9}, // 8 station
+                {10, 10}, // 9 station
+                {11, 11}, // 10 station
+                {12, 12}, // 11 station
+                {13, 13}, // 12 station
+                {14, 14}, // 13 station
+                {15, 15}, // 14 station
+                {16, 16}, // 15 station
+                {17, 17}, // 16 station
+                {18, 18}, // 17 station
+                {19, 19}, // 18 station
+                {20, 20}, // 19 station
+                {21, 21}, // 20 station
+                {22, 22}, // 21 station
+                {23, 23}, // 22 station
+                {24, 24}, // 23 station
+                {25, 25}, // 24 station
+                {0, 0}    // 25 station
         });
     }
 

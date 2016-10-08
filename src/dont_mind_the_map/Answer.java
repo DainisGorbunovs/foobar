@@ -91,13 +91,68 @@
 
 package dont_mind_the_map;
 
+import java.util.*;
+
 public class Answer {
+    /*
+      The following is not needed as not using a bruteforce algorithm.
+      1. Go through the stations
+      2. Check backwards, has to access all other stations
+        0: from 1 (from 2 or 0) or 3 (from 1 or 0)
+     */
+    @Deprecated
     private static boolean isMeetingPath(int[][] subway, int[] path) {
         return false;
     }
 
+    /*
+      Return a list of stations which lead towards the toStation
+     */
+    private static LinkedHashSet<Integer> findFromStations(int[][] subway, int toStation) {
+        LinkedHashSet<Integer> fromStations = new LinkedHashSet<Integer>();
+//        List fromStations = new LinkedList<Integer>();
+        for (int station = 0; station < subway.length; ++station) {
+            for (int direction : subway[station]) {
+                if (direction == toStation) {
+                    fromStations.add(station);
+                }
+            }
+        }
+        return fromStations;
+    }
+
+    private static Set<Integer> travelPathRecursively(int[][] subway, Set<Integer> seen, int station) {
+        if (seen.size() == subway.length) {
+            return seen;
+        }
+        Set<Integer> result = seen;
+
+        for (int direction : subway[station]) {
+            result = travelPathRecursively(subway, seen, direction);
+            if (result.size() == subway.length) {
+                return result;
+            }
+        }
+
+        return result;
+    }
+
     private static boolean hasMeetingPath(int[][] subway) {
-        return false;
+//        for (int station = 0; station < subway.length; ++station) {
+//            Set fromStations = new HashSet<Integer>();
+//            int[] directions = subway[station];
+//
+//            for (int direction : directions) {
+//
+//            }
+//            findFromStations(subway, station);
+//
+//            if (fromStations.size() == subway.length) {
+//                return true;
+//            }
+//        }
+//        return false;
+        return travelPathRecursively(subway, new HashSet<Integer>(), 0).size() == subway.length;
     }
 
     private static int[][] subwayWithClosedStation(int[][] subway, int station) {
@@ -111,12 +166,12 @@ public class Answer {
         }
 
         // If closing a station, there is a meeting path
-        for (int station = 0; station < subway.length; ++station) {
-            // Close this station
-            if (hasMeetingPath(subwayWithClosedStation(subway, station))) {
-                return station;
-            }
-        }
+//        for (int station = 0; station < subway.length; ++station) {
+//            // Close this station
+//            if (hasMeetingPath(subwayWithClosedStation(subway, station))) {
+//                return station;
+//            }
+//        }
 
         // If even with closing 1 station, there is no meeting path.
         return -2;
@@ -130,6 +185,99 @@ public class Answer {
                 {1, 0}
         };
 
-        System.out.println("-1 ?= answer(subway) = " + answer(subway));
+        for (int station = 0; station < subway.length; ++station) {
+            LinkedHashSet<Integer> from = findFromStations(subway, station);
+            System.out.print(station + " <- ");
+            for (Integer kappa : from) {
+                System.out.print(kappa + ", ");
+            }
+            System.out.println();
+        }
+        // 1 and then 0
+        // 0: 2
+        // 1: 2
+
+        // BFS
+        // 2 is final destination
+        // get here from 0 or 1
+        // total: 0, 1
+
+        // 0 is new final destination
+        // get here from 1 or 3
+        // 1 is new final destination
+        // get here from 0 or 2 or 3
+        // total 0, 1, 2, 3
+
+
+        /*
+            0 <- 1, 3,
+            1 <- 0, 2, 3,
+            2 <- 0, 1,
+            3 <- 2,
+         */
+        /*
+            0 <- 1, 3,
+            1 <- 0, 2, 3,
+            2 <- 0(1, 3), 1(0,2,3),
+            3 <- 2(0(1, 3), 1(0,2,3)),
+         */
+
+        /*
+            0 <- 25,
+            1 <- 0,
+            2 <- 0, 1,
+            3 <- 2,
+            4 <- 3,
+            5 <- 4,
+            6 <- 5,
+            7 <- 6,
+            8 <- 7,
+            9 <- 8,
+            10 <- 9,
+            11 <- 10,
+            12 <- 11,
+            13 <- 12,
+            14 <- 13,
+            15 <- 14,
+            16 <- 15,
+            17 <- 16,
+            18 <- 17,
+            19 <- 18,
+            20 <- 19,
+            21 <- 20,
+            22 <- 21,
+            23 <- 22,
+            24 <- 23,
+            25 <- 24,
+
+
+            0 <- 25,
+            1 <- 0,
+            2 <- 0, 1,
+            3 <- 2,
+            4 <- 3,
+            5 <- 4,
+            6 <- 5,
+            7 <- 6,
+            8 <- 7,
+            9 <- 8,
+            10 <- 9,
+            11 <- 10,
+            12 <- 11,
+            13 <- 12,
+            14 <- 13,
+            15 <- 14,
+            16 <- 15,
+            17 <- 16,
+            18 <- 17,
+            19 <- 18,
+            20 <- 19,
+            21 <- 20,
+            22 <- 21,
+            23 <- 22,
+            24 <- 23,
+            25 <- 24 (23(22(21(20(19(18(17(16(15(14(13(12(11(10(9(8(7(6(5(4(3(2(0(25), 1(0))))))))))))))))))))))),
+         */
+//        System.out.println("-1 ?= answer(subway) = " + answer(subway));
     }
 }
