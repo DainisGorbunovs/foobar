@@ -134,8 +134,8 @@ public class Answer {
         return stations;
     }
 
-    private static int closedStation = -1;
-    private static int continuingLine = 0;
+//    private static int closedStation = -1;
+//    private static int continuingLine = 0;
 
     private static Set<Integer> travelPathRecursively(int[][] subway, Set<Integer> seen, int station) {
         // Start with an empty set,
@@ -239,9 +239,9 @@ public class Answer {
         // If closing a station, there is a meeting path
         for (int station = 0; station < subway.length; ++station) {
             // Close this station
-            closedStation = station;
-//            if (hasMeetingPath(subwayWithClosedStation(subway, station))) {
-            if (hasMeetingPath(subway)) {
+//            closedStation = station;
+            if (hasMeetingPath(subwayWithClosedStation(subway, station))) {
+//            if (hasMeetingPath(subway)) {
                 return station;
             }
         }
@@ -252,19 +252,18 @@ public class Answer {
 
     public static void main(String[] args) {
         int[][] subway = new int[][] {
-                {1,1}, // 0 station
-                {2,2}, // 1 station
-                {0,2}  // 2 station
+                {1, 2},
+                {1, 1},
+                {2, 2}
         };
 
-        subway = subwayWithClosedStation(subway, 2);
         for (int[] lines : subway) {
             for (int line : lines) {
                 System.out.print(line + ", ");
             }
             System.out.println();
         }
-        if (true) return;
+//        if (true) return;
 
         for (int station = 0; station < subway.length; ++station) {
             LinkedHashSet<Integer> from = findFromStations(subway, station);
@@ -274,7 +273,7 @@ public class Answer {
             }
             System.out.println();
         }
-        if (true) return;
+//        if (true) return;
         // 1 and then 0
         // 0: 2
         // 1: 2
@@ -360,7 +359,7 @@ public class Answer {
             24 <- 23,
             25 <- 24 (23(22(21(20(19(18(17(16(15(14(13(12(11(10(9(8(7(6(5(4(3(2(0(25), 1(0))))))))))))))))))))))),
          */
-//        System.out.println("-1 ?= answer(subway) = " + answer(subway));
-        System.out.println("-1 ?= answer(subway) = " + answer(subwayWithClosedStation(subway, 1)));
+        System.out.println("-1 ?= answer(subway) = " + answer(subway));
+//        System.out.println("-1 ?= answer(subway) = " + answer(subwayWithClosedStation(subway, 1)));
     }
 }
