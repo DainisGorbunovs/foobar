@@ -6,38 +6,38 @@ import org.junit.Test;
 public class AnswerTest {
     @Test
     public void caseATest() {
-        Assert.assertEquals(-1, new int[][] {
+        Assert.assertEquals(-1, Answer.answer(new int[][] {
                 {2, 1}, // 0 station
                 {2, 0}, // 1 station
                 {3, 1}, // 2 station
                 {1, 0} //  3 station
-        });
+        }));
     }
 
     @Test
     public void caseBTest() {
-        Assert.assertEquals(1, new int[][] {
+        Assert.assertEquals(1, Answer.answer(new int[][] {
                 {1, 2},
                 {1, 1},
                 {2, 2}
-        });
+        }));
     }
 
     @Test
     public void caseCTest() {
-        Assert.assertEquals(-2, new int[][] {
+        Assert.assertEquals(-2, Answer.answer(new int[][] {
                 {0, 1, 2},
                 {1, 2, 0},
                 {2, 0, 1},
                 {3, 4, 5},
                 {4, 5, 3},
                 {5, 3, 4}
-        });
+        }));
     }
 
     @Test
     public void caseDTest() {
-        Assert.assertEquals(-1, new int[][] {
+        Assert.assertEquals(-1, Answer.answer(new int[][] {
                 {1, 2}, // 0 station
                 {2, 2}, // 1 station
                 {3, 3}, // 2 station
@@ -64,12 +64,12 @@ public class AnswerTest {
                 {24, 24}, // 23 station
                 {25, 25}, // 24 station
                 {0, 0}    // 25 station
-        });
+        }));
     }
 
     @Test
     public void caseETest() {
-        Assert.assertEquals(0, new int[][] {
+        Assert.assertEquals(0, Answer.answer(new int[][] {
                 {2, 3, 0},
                 {2, 4, 1},
                 {0, 5, 2},
@@ -118,7 +118,7 @@ public class AnswerTest {
                 {46, 0, 46},
                 {47, 1, 45},
                 {45, 2, 47}
-        });
+        }));
     }
     /*
     subway[station][direction]

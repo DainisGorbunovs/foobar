@@ -110,7 +110,6 @@ public class Answer {
      */
     private static LinkedHashSet<Integer> findFromStations(int[][] subway, int toStation) {
         LinkedHashSet<Integer> fromStations = new LinkedHashSet<Integer>();
-//        List fromStations = new LinkedList<Integer>();
         for (int station = 0; station < subway.length; ++station) {
             for (int direction : subway[station]) {
                 if (direction == toStation) {
@@ -122,17 +121,6 @@ public class Answer {
     }
 
     private static Set<Integer> travelPathRecursively(int[][] subway, Set<Integer> seen, int station) {
-//        if (seen.size() == subway.length) {
-//            return seen;
-//        }
-//        Set<Integer> result = seen;
-//
-//        for (int direction : subway[station]) {
-//            result = travelPathRecursively(subway, seen, direction);
-//            if (result.size() == subway.length) {
-//                return result;
-//            }
-//        }
         // Start with an empty set,
         // Start from station 0
         //
@@ -154,20 +142,6 @@ public class Answer {
     }
 
     private static boolean hasMeetingPath(int[][] subway) {
-//        for (int station = 0; station < subway.length; ++station) {
-//            Set fromStations = new HashSet<Integer>();
-//            int[] directions = subway[station];
-//
-//            for (int direction : directions) {
-//
-//            }
-//            findFromStations(subway, station);
-//
-//            if (fromStations.size() == subway.length) {
-//                return true;
-//            }
-//        }
-//        return false;
         return travelPathRecursively(subway, new HashSet<Integer>(), 0).size() == subway.length;
     }
 
