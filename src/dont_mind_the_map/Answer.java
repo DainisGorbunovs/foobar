@@ -81,7 +81,11 @@
     So, in this case, answer would return 0 because there is no meeting path until you close station 0.
 
     To illustrate closing stations,
-    subway = [[1,1],[2,2],[0,2]]
+    subway = [
+        [1,1], // 0 station
+        [2,2], // 1 station
+        [0,2]  // 2 station
+    ]
     If station 2 is closed, then
     station 1 direction 0 will follow station 2 direction 0 to station 0, which will then be its new destination.
     station 1 direction 1 will follow station 2 direction 1 to station 2, but that station is closed, so it will
@@ -120,6 +124,19 @@ public class Answer {
         return fromStations;
     }
 
+    private static LinkedHashSet<Integer> findFromStationsOnLine(int[][] subway, int toStation, int line) {
+        LinkedHashSet<Integer> stations = findFromStations(subway, toStation);
+        for (Integer station : stations) {
+            if (subway[station][line] != toStation) {
+                stations.remove(station);
+            }
+        }
+        return stations;
+    }
+
+    private static int closedStation = -1;
+    private static int continuingLine = 0;
+
     private static Set<Integer> travelPathRecursively(int[][] subway, Set<Integer> seen, int station) {
         // Start with an empty set,
         // Start from station 0
@@ -128,6 +145,7 @@ public class Answer {
             return seen;
         }
 
+        System.out.println("Got to: " + station);
         seen.add(station);
         LinkedHashSet<Integer> fromStations = findFromStations(subway, station);
         Set<Integer> result = seen;
@@ -145,8 +163,71 @@ public class Answer {
         return travelPathRecursively(subway, new HashSet<Integer>(), 0).size() == subway.length;
     }
 
+    // Remove station 2
     private static int[][] subwayWithClosedStation(int[][] subway, int station) {
-        return subway;
+        for (Integer fromStation : findFromStations(subway, station)) {
+            for (int line = 0; line < subway[fromStation].length; ++line) {
+                // If the line sends to the closed station, change things
+                if (subway[fromStation][line] == station) {
+//                    System.out.printf("Subway[%d][%d] == %d\n", fromStation, line, station);
+                    // Can swap fromStation to the station following the next station
+                    if (subway[station][line] != station) {
+//                        System.out.printf("Subway[%d][%d] == %d, not equal to %d\n", fromStation, line, subway[station][line], station);
+                        subway[fromStation][line] = subway[station][line];
+                    } else {
+                        LinkedHashSet<Integer> precedingStations = findFromStationsOnLine(subway, fromStation, (line^1));
+                        if (!precedingStations.iterator().hasNext()) {
+                            subway[fromStation][line] = subway[fromStation][line^1];
+//                            continue;
+//                            System.out.println("FAIL @ from station " + fromStation + ", at line " + (line^1));
+                        } else {
+                            int nextStation = precedingStations.iterator().next();
+//                        System.out.println("Printing preceding stations: " + nextStation);
+//                        System.out.println("Next: " + subway[nextStation][line]);
+                            subway[fromStation][line] = subway[nextStation][line];
+//                        System.out.printf("Subway[%d][%d] == %d\n", fromStation, line, subway[fromStation][line]);
+                        }
+
+                    }
+                }
+
+            }
+            // Go to station 1, first line can continue to station 2's direction
+            // second line is the same, so it goes back to station 0's direction
+
+            // Go to station 2, do nothing
+
+            // Remove station 2
+            // After station 2, decrease values for all stations
+
+            /*
+                0 <- 2,
+                1 <- 0,
+                2 <- 1, 2,
+             */
+            /*
+                subway = [
+                    [1,1], // 0 station
+                    [0,2], // 1 station
+                    [0,2]  // 2 station
+                ]
+             */
+        }
+        int[][] resizedSubway = new int[subway.length - 1][subway[0].length];
+
+        System.arraycopy(subway, 0, resizedSubway, 0, station);
+        System.arraycopy(subway, station+1, resizedSubway, station, subway.length - station - 1);
+
+        for (int parsedStation = 0; parsedStation < resizedSubway.length; ++parsedStation) {
+            for (int parsedLine = 0; parsedLine < subway[0].length; ++parsedLine) {
+                if (resizedSubway[parsedStation][parsedLine] >= station) {
+                    --resizedSubway[parsedStation][parsedLine];
+                }
+
+            }
+        }
+
+        return resizedSubway;
     }
 
     public static int answer(int[][] subway) {
@@ -156,12 +237,14 @@ public class Answer {
         }
 
         // If closing a station, there is a meeting path
-//        for (int station = 0; station < subway.length; ++station) {
-//            // Close this station
+        for (int station = 0; station < subway.length; ++station) {
+            // Close this station
+            closedStation = station;
 //            if (hasMeetingPath(subwayWithClosedStation(subway, station))) {
-//                return station;
-//            }
-//        }
+            if (hasMeetingPath(subway)) {
+                return station;
+            }
+        }
 
         // If even with closing 1 station, there is no meeting path.
         return -2;
@@ -169,10 +252,19 @@ public class Answer {
 
     public static void main(String[] args) {
         int[][] subway = new int[][] {
-                {1, 2},
-                {1, 1},
-                {2, 2}
+                {1,1}, // 0 station
+                {2,2}, // 1 station
+                {0,2}  // 2 station
         };
+
+        subway = subwayWithClosedStation(subway, 2);
+        for (int[] lines : subway) {
+            for (int line : lines) {
+                System.out.print(line + ", ");
+            }
+            System.out.println();
+        }
+        if (true) return;
 
         for (int station = 0; station < subway.length; ++station) {
             LinkedHashSet<Integer> from = findFromStations(subway, station);
@@ -182,6 +274,7 @@ public class Answer {
             }
             System.out.println();
         }
+        if (true) return;
         // 1 and then 0
         // 0: 2
         // 1: 2
@@ -267,6 +360,7 @@ public class Answer {
             24 <- 23,
             25 <- 24 (23(22(21(20(19(18(17(16(15(14(13(12(11(10(9(8(7(6(5(4(3(2(0(25), 1(0))))))))))))))))))))))),
          */
-        System.out.println("-1 ?= answer(subway) = " + answer(subway));
+//        System.out.println("-1 ?= answer(subway) = " + answer(subway));
+        System.out.println("-1 ?= answer(subway) = " + answer(subwayWithClosedStation(subway, 1)));
     }
 }
