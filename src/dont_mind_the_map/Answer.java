@@ -126,9 +126,15 @@ public class Answer {
 
     private static LinkedHashSet<Integer> findFromStationsOnLine(int[][] subway, int toStation, int line) {
         LinkedHashSet<Integer> stations = findFromStations(subway, toStation);
-        for (Integer station : stations) {
-            if (subway[station][line] != toStation) {
-                stations.remove(station);
+        Iterator<Integer> stationIterator = stations.iterator();
+        while (stationIterator.hasNext()) {
+            Integer station = stationIterator.next();
+            try {
+                if (subway[station][line] != toStation) {
+                    stationIterator.remove();
+                }
+            } catch (Exception e) {
+                System.out.println("FAIL: " + station + ", " + line);
             }
         }
         return stations;
@@ -160,7 +166,11 @@ public class Answer {
     }
 
     private static boolean hasMeetingPath(int[][] subway) {
-        return travelPathRecursively(subway, new HashSet<Integer>(), 0).size() == subway.length;
+        Set<Integer> travels = travelPathRecursively(subway, new HashSet<Integer>(), 0);
+        System.out.println("NEW");
+        printArray(subway);
+        printDescriptions(subway);
+        return travels.size() == subway.length;
     }
 
     // Remove station 2
@@ -175,9 +185,9 @@ public class Answer {
 //                        System.out.printf("Subway[%d][%d] == %d, not equal to %d\n", fromStation, line, subway[station][line], station);
                         subway[fromStation][line] = subway[station][line];
                     } else {
-                        LinkedHashSet<Integer> precedingStations = findFromStationsOnLine(subway, fromStation, (line^1));
+                        LinkedHashSet<Integer> precedingStations = findFromStationsOnLine(subway, fromStation, (line+1)%3);
                         if (!precedingStations.iterator().hasNext()) {
-                            subway[fromStation][line] = subway[fromStation][line^1];
+                            subway[fromStation][line] = subway[fromStation][(line+1)%3];
 //                            continue;
 //                            System.out.println("FAIL @ from station " + fromStation + ", at line " + (line^1));
                         } else {
@@ -250,21 +260,16 @@ public class Answer {
         return -2;
     }
 
-    public static void main(String[] args) {
-        int[][] subway = new int[][] {
-                {1, 2},
-                {1, 1},
-                {2, 2}
-        };
-
-        for (int[] lines : subway) {
+    private static void printArray(int[][] subway) {
+       for (int[] lines : subway) {
             for (int line : lines) {
                 System.out.print(line + ", ");
             }
             System.out.println();
         }
-//        if (true) return;
+    }
 
+    private static void printDescriptions(int[][] subway) {
         for (int station = 0; station < subway.length; ++station) {
             LinkedHashSet<Integer> from = findFromStations(subway, station);
             System.out.print(station + " <- ");
@@ -273,6 +278,30 @@ public class Answer {
             }
             System.out.println();
         }
+    }
+
+    public static void main(String[] args) {
+//        int[][] subway = new int[][] {
+//                {0, 1, 2},
+//                {1, 2, 0},
+//                {2, 0, 1},
+//                {3, 4, 5},
+//                {4, 5, 3},
+//                {5, 3, 4}
+//        };
+//        subway = subwayWithClosedStation(subway, 1);
+//        subway = subwayWithClosedStation(subway, 2);
+        int[][] subway = new int[][] {
+                {0, 1, 1},
+                {1, 0, 0},
+                {2, 3, 3},
+                {3, 2, 2}
+        };
+
+//        printArray(subway);
+//        if (true) return;
+
+        printDescriptions(subway);
 //        if (true) return;
         // 1 and then 0
         // 0: 2
