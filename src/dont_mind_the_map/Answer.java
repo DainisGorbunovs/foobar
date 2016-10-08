@@ -195,32 +195,9 @@ public class Answer {
 
     public static void main(String[] args) {
         int[][] subway = new int[][] {
-                {1, 2}, // 0 station
-                {2, 2}, // 1 station
-                {3, 3}, // 2 station
-                {4, 4}, // 3 station
-                {5, 5}, // 4 station
-                {6, 6}, // 5 station
-                {7, 7}, // 6 station
-                {8, 8}, // 7 station
-                {9, 9}, // 8 station
-                {10, 10}, // 9 station
-                {11, 11}, // 10 station
-                {12, 12}, // 11 station
-                {13, 13}, // 12 station
-                {14, 14}, // 13 station
-                {15, 15}, // 14 station
-                {16, 16}, // 15 station
-                {17, 17}, // 16 station
-                {18, 18}, // 17 station
-                {19, 19}, // 18 station
-                {20, 20}, // 19 station
-                {21, 21}, // 20 station
-                {22, 22}, // 21 station
-                {23, 23}, // 22 station
-                {24, 24}, // 23 station
-                {25, 25}, // 24 station
-                {0, 0}    // 25 station
+                {1, 2},
+                {1, 1},
+                {2, 2}
         };
 
         for (int station = 0; station < subway.length; ++station) {

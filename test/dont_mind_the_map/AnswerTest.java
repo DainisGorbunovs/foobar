@@ -19,7 +19,7 @@ public class AnswerTest {
         Assert.assertEquals(1, new int[][] {
                 {1, 2},
                 {1, 1},
-                {2, 2},
+                {2, 2}
         });
     }
 
