@@ -27,4 +27,4 @@
 * [`grid_zero`](tasks/grid_zero) time given: 192 hours
 * [`zombit_pandemic`](tasks/zombit_pandemic) time given: 192 hours
 * [`dont_mind_the_map`](tasks/dont_mind_the_map) time given: 528 hours
-* _another task_
+* [`carrotland`](tasks/carrotland) time given: 360 hours

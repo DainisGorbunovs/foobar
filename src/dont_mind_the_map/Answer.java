@@ -259,4 +259,8 @@ public class Answer {
         }
         return copy;
     }
+
+    public static void main(String[] args) {
+
+    }
 }
