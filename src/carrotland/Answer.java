@@ -25,9 +25,87 @@
 
 package carrotland;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class Answer {
-    public static int answer(int[][] vertices) {
+    static class Triangle {
+        Point a;
+        Point b;
+        Point c;
+
+        public Triangle(Point a, Point b, Point c) {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
+    }
+
+    static class Point {
+        int x;
+        int y;
+
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    /**
+     * Calculates area of a triangle using shoelace formula
+     * @param triangle
+     * @return area
+     */
+    public static int getArea(Triangle triangle) {
+        BigDecimal area = BigDecimal.ZERO;
+        area = BigDecimal.valueOf(triangle.a.x).multiply(
+                BigDecimal.valueOf(triangle.b.y).subtract(
+                        BigDecimal.valueOf(triangle.c.y)
+                )
+        );
+
+        area = area.add(
+                BigDecimal.valueOf(triangle.b.x).multiply(
+                        BigDecimal.valueOf(triangle.c.y).subtract(
+                                BigDecimal.valueOf(triangle.a.y)
+                        )
+                )
+        );
+
+        area = area.add(
+                BigDecimal.valueOf(triangle.c.x).multiply(
+                        BigDecimal.valueOf(triangle.a.y).subtract(
+                                BigDecimal.valueOf(triangle.b.y)
+                        )
+                )
+        );
+
+        area = area.divide(BigDecimal.valueOf(2.0)).setScale(0, RoundingMode.HALF_UP);
+
+        return area.abs().toBigInteger().intValueExact();
+
+//        area = triangle.a.x * (triangle.b.y - triangle.c.y) / 2;
+//        area += triangle.b.x * (triangle.c.y - triangle.a.y) / 2;
+//        area += triangle.c.x * (triangle.a.y - triangle.b.y) / 2;
+//        area = Math.abs(Math.round(area));
+//        return (int) area;
+    }
+
+    public static int getPerimeter(Triangle triangle) {
         return 0;
+    }
+
+    public static int answer(int[][] vertices) {
+        // Pick's theorem: A = i + b/2 - 1
+        // where A - area, i - points inside triangle, b - points on the border
+        // Reordered: i = A - b/2 + 1
+        Triangle triangle = new Triangle(
+                new Point(vertices[0][0], vertices[0][1]),
+                new Point(vertices[1][0], vertices[1][1]),
+                new Point(vertices[2][0], vertices[2][1])
+        );
+
+        return getArea(triangle) - getPerimeter(triangle)/2 + 1 ;
     }
 
     public static void main(String[] args) {
