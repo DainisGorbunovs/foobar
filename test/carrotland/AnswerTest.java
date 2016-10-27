@@ -14,4 +14,14 @@ public class AnswerTest {
     public void caseBTest() {
         Assert.assertEquals(1730960165, Answer.answer(new int[][] {{91207, 89566}, {-88690, -83026}, {67100, 47194}}));
     }
+
+    @Test
+    public void caseCTest() {
+        Assert.assertEquals(0, Answer.answer(new int[][] {{0, 0}, {1, 0}, {0, 1}}));
+    }
+
+    @Test
+    public void caseDTest() {
+        Assert.assertEquals(1, Answer.answer(new int[][] {{-1, -1}, {0, 1}, {1, 0}}));
+    }
 }

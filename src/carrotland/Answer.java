@@ -26,7 +26,6 @@
 package carrotland;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class Answer {
     static class Triangle {
@@ -39,6 +38,10 @@ public class Answer {
             this.b = b;
             this.c = c;
         }
+
+        public Triangle(int[][] vertices) {
+            this(new Point(vertices[0]), new Point(vertices[1]), new Point(vertices[2]));
+        }
     }
 
     static class Point {
@@ -48,6 +51,10 @@ public class Answer {
         public Point(int x, int y) {
             this.x = x;
             this.y = y;
+        }
+
+        public Point(int[] vertex) {
+            this(vertex[0], vertex[1]);
         }
     }
 
@@ -80,9 +87,9 @@ public class Answer {
                 )
         );
 
-        area = area.divide(BigDecimal.valueOf(2.0)).setScale(0, RoundingMode.HALF_UP);
+        area = area.divide(BigDecimal.valueOf(2.0));
 
-        return area.abs().toBigInteger().intValueExact();
+        return area.abs().toBigInteger().intValue();
 
 //        area = triangle.a.x * (triangle.b.y - triangle.c.y) / 2;
 //        area += triangle.b.x * (triangle.c.y - triangle.a.y) / 2;
@@ -91,21 +98,58 @@ public class Answer {
 //        return (int) area;
     }
 
-    public static int getPerimeter(Triangle triangle) {
-        return 0;
+    /**
+     * Counts the boundary points on triangle sides
+     * @param triangle
+     * @return boundary point count
+     */
+    public static int getBoundaryPointCount(Triangle triangle) {
+        int count = getGreatestCommonDivisor(
+                Math.abs(triangle.a.x - triangle.b.x),
+                Math.abs(triangle.a.y - triangle.b.y)
+        );
+
+        count += getGreatestCommonDivisor(
+                Math.abs(triangle.b.x - triangle.c.x),
+                Math.abs(triangle.b.y - triangle.c.y)
+        );
+
+        count += getGreatestCommonDivisor(
+                Math.abs(triangle.c.x - triangle.a.x),
+                Math.abs(triangle.c.y - triangle.a.y)
+        );
+
+        return count;
+    }
+
+    /**
+     * Euclidean algorithm to find the greatest common divisor
+     * @param a number
+     * @param b number
+     * @return greatest common divisor
+     */
+    public static int getGreatestCommonDivisor(int a, int b) {
+        if (b == 0) {
+            return a;
+        }
+
+        return getGreatestCommonDivisor(b, a % b);
     }
 
     public static int answer(int[][] vertices) {
         // Pick's theorem: A = i + b/2 - 1
         // where A - area, i - points inside triangle, b - points on the border
-        // Reordered: i = A - b/2 + 1
-        Triangle triangle = new Triangle(
-                new Point(vertices[0][0], vertices[0][1]),
-                new Point(vertices[1][0], vertices[1][1]),
-                new Point(vertices[2][0], vertices[2][1])
-        );
+        Triangle triangle = new Triangle(vertices);
 
-        return getArea(triangle) - getPerimeter(triangle)/2 + 1 ;
+        int area = getArea(triangle);
+
+        // If area is not greater than 0, then it has 0 points
+        if (area <= 0) {
+            return 0;
+        }
+
+        // Reordered Pick's theorem: i = A - b/2 + 1
+        return area - getBoundaryPointCount(triangle)/2 + 1;
     }
 
     public static void main(String[] args) {
