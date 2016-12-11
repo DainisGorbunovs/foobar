@@ -6,7 +6,8 @@ public class Answer {
     private static int countMinHenchmen(int total_lambs) {
         // Lamb count follows geometrical progression
         // Count is sum of it: 1 + 2 + 4 + 8 + 16 ...
-        return (int) (Math.log(total_lambs) / Math.log(2));
+        // Sum is 2^n - 1
+        return (int) (Math.log(total_lambs + 1) / Math.log(2));
     }
 
     private static int countMaxHenchmen(int total_lambs) {
@@ -65,4 +66,9 @@ public class Answer {
     2. Give a max of 2x more LAMB than previous
     3. Give a min of sum of previous two LAMBs
 
+     */
+
+    /*
+    Test 3: 511
+    Test 9: 1048575
      */
