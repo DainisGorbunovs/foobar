@@ -28,3 +28,9 @@
 * [`zombit_pandemic`](tasks/zombit_pandemic) time given: 192 hours
 * [`dont_mind_the_map`](tasks/dont_mind_the_map) time given: 528 hours
 * [`carrotland`](tasks/carrotland) time given: 360 hours
+
+## After level 5
+### Level 1
+>Why did you sign up for infiltration duty again? The pamphlets from Bunny HQ promised exotic and interesting missions, yet here you are drudging in the lowest level of Commander Lambda's organization. Hopefully you get that promotion soon...
+
+* [`solar_doomsday`](tasks/solar_doomsday) time given: 48 hours
