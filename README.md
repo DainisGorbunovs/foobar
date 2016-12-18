@@ -41,3 +41,8 @@
 >The latest gossip in the henchman breakroom is that "LAMBCHOP" stands for "Lambda's Anti-Matter Biofuel Collision Hadron Oxidating Potentiator". You're pretty sure it runs on diesel, not biofuel, but you can at least give the commander credit for trying.
 
 * [`lovely_lucky_lambs`](tasks/lovely_lucky_lambs) time given: 72 hours
+
+>At least all this time spent running errands all over Commander Lambda's space station have given you a really good 
+understanding of the station's layout. You'll need that when you're finally ready to destroy the LAMBCHOP and rescue the bunny prisoners.
+
+* [`elevator_maintenance`](tasks/elevator_maintenance) time given: 72 hours
