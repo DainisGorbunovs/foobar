@@ -1,6 +1,6 @@
 # foobar
 
-## Tasks
+## Tasks: round #1
 ### Level 1
 * [`backward_and_forward`](tasks/backward_and_forward) time given: 48 hours
 
@@ -29,22 +29,19 @@
 * [`dont_mind_the_map`](tasks/dont_mind_the_map) time given: 528 hours
 * [`carrotland`](tasks/carrotland) time given: 360 hours
 
-## After level 5
+## Tasks: round #2
 ### Level 1
 >Why did you sign up for infiltration duty again? The pamphlets from Bunny HQ promised exotic and interesting missions, yet here you are drudging in the lowest level of Commander Lambda's organization. Hopefully you get that promotion soon...
 
 * [`solar_doomsday`](tasks/solar_doomsday) time given: 48 hours
-
 > You survived a week in Commander Lambda's organization, and you even managed to get yourself promoted. Hooray! Henchmen still don't have the kind of security access you'll need to take down Commander Lambda, though, so you'd better keep working. Chop chop!
 
 ### Level 2
 >The latest gossip in the henchman breakroom is that "LAMBCHOP" stands for "Lambda's Anti-Matter Biofuel Collision Hadron Oxidating Potentiator". You're pretty sure it runs on diesel, not biofuel, but you can at least give the commander credit for trying.
-
 * [`lovely_lucky_lambs`](tasks/lovely_lucky_lambs) time given: 72 hours
 
 >At least all this time spent running errands all over Commander Lambda's space station have given you a really good 
 understanding of the station's layout. You'll need that when you're finally ready to destroy the LAMBCHOP and rescue the bunny prisoners.
-
 * [`elevator_maintenance`](tasks/elevator_maintenance) time given: 72 hours
 
 #### Notes
@@ -54,5 +51,7 @@ MergeSort with a comparator.
 >Awesome! Commander Lambda was so impressed by your efforts that she's made you her personal assistant. You'll be helping her directly with her work, which means you'll have access to all of her files-including the ones on the LAMBCHOP doomsday device. This is the chance you've been waiting for. Can you use your new access to finally topple Commander Lambda's evil empire?
 
 >Who the heck puts clover and coffee creamer in their tea? Commander Lambda, apparently. When you signed up to infiltrate her organization, you didn't think you'd get such an up-close and personal look at her more...unusual tastes.
-
 * [`bomb_baby`](tasks/bomb_baby) time given: 96 hours
+
+>For a world-destroying despot with a penchant for making space-station-sized doomsday devices, Commander Lambda sure has good taste in office furniture. As her personal assistant, you have the latest in standing desk and ergonomic chair technology, and it sure makes a difference!
+* [`doomsday_fuel`](tasks/doomsday_fuel) time given: 96 hours
