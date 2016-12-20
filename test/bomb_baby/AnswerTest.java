@@ -13,4 +13,14 @@ public class AnswerTest {
     public void caseBTest() {
         Assert.assertEquals("4", Answer.answer("4", "7"));
     }
+
+    @Test
+    public void caseImpossibleTest() {
+        Assert.assertEquals("impossible", Answer.answer("2", "4"));
+    }
+
+    @Test
+    public void caseImpossible2Test() {
+        Assert.assertEquals("impossible", Answer.answer("5", "10"));
+    }
 }
