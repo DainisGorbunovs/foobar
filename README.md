@@ -46,3 +46,13 @@
 understanding of the station's layout. You'll need that when you're finally ready to destroy the LAMBCHOP and rescue the bunny prisoners.
 
 * [`elevator_maintenance`](tasks/elevator_maintenance) time given: 72 hours
+
+#### Notes
+`elevator_maintenance` does not work with `Arrays.sort(T[] a, Comparator<? super T> c)`. So had to write my own 
+MergeSort with a comparator.
+
+>Awesome! Commander Lambda was so impressed by your efforts that she's made you her personal assistant. You'll be helping her directly with her work, which means you'll have access to all of her files-including the ones on the LAMBCHOP doomsday device. This is the chance you've been waiting for. Can you use your new access to finally topple Commander Lambda's evil empire?
+
+>Who the heck puts clover and coffee creamer in their tea? Commander Lambda, apparently. When you signed up to infiltrate her organization, you didn't think you'd get such an up-close and personal look at her more...unusual tastes.
+
+* [`bomb_baby`](tasks/bomb_baby) time given: 96 hours

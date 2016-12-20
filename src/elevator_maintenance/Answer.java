@@ -12,17 +12,12 @@ public class Answer {
 
             // ["1", "1.0", "1.0.0"] case
             boolean firstIsOlder = first.length < second.length;
-            System.out.printf("Comparing %s with %s\n", o1, o2);
-//            System.out.println("firstIsOlder = " + firstIsOlder);
 
             for (int index = 0; index < Math.min(first.length, second.length); ++index) {
                 int firstInt = Integer.parseInt(first[index]);
                 int secondInt = Integer.parseInt(second[index]);
 
-                System.out.printf("First [%d] vs [%d] Second\n", firstInt, secondInt);
-
                 if (firstInt > secondInt) {
-                    System.out.println("First is newer than second");
                     firstIsOlder = false;
                     break;
                 } else if (firstInt < secondInt) {
@@ -36,8 +31,58 @@ public class Answer {
     };
 
     public static String[] answer(String[] l) {
-        Arrays.sort(l, versionComparator);
+        // For some reason the below does not work on Foobar
+        // Arrays.sort(l, versionComparator)
+
+        // So wrote my own merge sort
+        mergeSort(l, versionComparator);
         return l;
+    }
+
+    private static <T> void mergeSort(T[] array, Comparator<? super T> comparator) {
+        mergeSort(array, 0, array.length - 1, comparator);
+    }
+
+    private static <T> void mergeSort(T[] array, int left, int right, Comparator<? super T> comparator) {
+        // Array is sorted if has 0 or 1 elements
+        if (left == right)
+            return;
+
+        int middle = (left + right) / 2;
+        mergeSort(array, left, middle, comparator);
+        mergeSort(array, middle + 1, right, comparator);
+
+        merge(array, left, middle, right, comparator);
+    }
+
+    private static <T> void merge(T[] array, int left, int middle, int right, Comparator<? super T> comparator) {
+        int n = right - left + 1;
+        Object[] values = new Object[n];
+
+        int leftIndex = left;
+
+        int rightIndex = middle + 1;
+
+        int index = 0;
+
+        while (leftIndex <= middle && rightIndex <= right) {
+            if (comparator.compare(array[leftIndex], array[rightIndex]) < 0) {
+                values[index++] = array[leftIndex++];
+            } else {
+                values[index++] = array[rightIndex++];
+            }
+        }
+
+        while (leftIndex <= middle) {
+            values[index++] = array[leftIndex++];
+        }
+        while (rightIndex <= right) {
+            values[index++] = array[rightIndex++];
+        }
+
+        for (index = 0; index < n; index++)
+            //noinspection unchecked
+            array[left + index] = (T) values[index];
     }
 
     public static void main(String[] args) {
