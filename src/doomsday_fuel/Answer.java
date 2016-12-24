@@ -4,6 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /*
+    Helpful information:
+        https://en.wikipedia.org/wiki/Absorbing_Markov_chain
+        https://github.com/ivanseed/google-foobar-help/blob/master/challenges/doomsday_fuel/doomsday_fuel.md
+
     Reusing functions of other people as in real world this challenge is solved using libraries.
     Also no need to reinvent the wheel.
  */
@@ -260,14 +264,6 @@ public class Answer {
         return (double) m[fromNode][toNode] / count;
     }
 
-    static double getTransitionProbability(double[][] m, int fromNode, int toNode) {
-        int count = 0;
-        for (double times : m[fromNode]) {
-            count += times;
-        }
-        return m[fromNode][toNode] / count;
-    }
-
     /**
      * Returns Q matrix (probabilities of transitioning from transient state to another)
      * @param matrix Matrix array
@@ -355,6 +351,13 @@ public class Answer {
         return result;
     }
 
+    /**
+     * Finds the probabilities of reaching terminal states.
+     * Probabilities are in fractions, e.g. 1/7 probability.
+     *
+     * @param m Input matrix of ore form states
+     * @return Fractional probabilities of reaching terminal states
+     */
     public static int[] answer(int[][] m) {
         // If matrix is 1x1, then probability is 100%
         if (m.length == 1) {
@@ -375,17 +378,17 @@ public class Answer {
         // FR = (I-Q)^-1 * R, probabilities of reaching the terminal states
         double[][] FR = multiplyMatrix(F, R);
 
-        int leastCommonDenominator = Answer.leastCommonMultiple(Answer.getFractionDenominators(FR[0]));
-
+        // Create the answer
         int[] answer = new int[FR[0].length + 1];
+
+        // Last number is the least common denominator
+        int leastCommonDenominator = Answer.leastCommonMultiple(Answer.getFractionDenominators(FR[0]));
         answer[FR[0].length] = leastCommonDenominator;
 
+        // Other numbers must be multiplied by it and rounded to the nearest integer
         for (int index = 0; index < FR[0].length; ++index) {
             answer[index] = (int) Math.round(FR[0][index]*leastCommonDenominator);
         }
-
-        // Redundancy because of int / double type:
-        // getTransitionProbability()
 
         return answer;
     }
