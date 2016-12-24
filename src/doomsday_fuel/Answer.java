@@ -260,12 +260,51 @@ public class Answer {
         return (double) m[fromNode][toNode] / count;
     }
 
+    /**
+     * Returns Q matrix (probabilities of transitioning from transient state to another)
+     * @param matrix Matrix array
+     * @param nodes Transition nodes
+     * @return Q matrix
+     */
+    static double[][] getTransitionProbabilities(int[][] matrix, int[] nodes) {
+        double[][] probabilities = new double[nodes.length][nodes.length];
+
+        int nodeIndex = 0;
+        for (int node : nodes) {
+            int toIndex = 0;
+            for (int toNode : nodes) {
+                probabilities[nodeIndex][toIndex] = getTransitionProbability(matrix, node, toNode);
+                toIndex++;
+            }
+            nodeIndex++;
+        }
+
+        return probabilities;
+    }
+
+    /**
+     * WIP
+     * @param F
+     * @return
+     */
+    static double[][] getReachingProbabilities(double[][] F) {
+        double[][] identitySubtractF = F;
+
+        return identitySubtractF;
+    }
+
     public static int[] answer(int[][] m) {
+        // Find transitional and terminal nodes
+        int[][] nodeTypes = separateTransitionTerminalNodes(m);
+
         // Q: probability of transitioning from some transient state to another
+        double[][] Q = getTransitionProbabilities(m, nodeTypes[TRANSITION_NODE]);
         // R: probability of transitioning from some transient state to some absorbing state.
 
         // F = (I-Q)^-1, the expected probabilities reaching transient states from transient states
         // FR = (I-Q)^-1 * R, probabilities of reaching the terminal states
+        double[][] F = getReachingProbabilities(Q);
+
 
         return null;
     }

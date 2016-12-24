@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class AnswerTest {
+    private static final double DOUBLEDELTA = 0.0000001;
     int[][] caseAinput = new int[][]{
             {0, 2, 1, 0, 0},
             {0, 0, 0, 3, 4},
@@ -67,7 +68,7 @@ public class AnswerTest {
         double[][] inverse = Answer.invert(input);
 
         for (int index = 0; index < expectedInverse.length; ++index) {
-            Assert.assertArrayEquals(expectedInverse[index], inverse[index], 0.0000001);
+            Assert.assertArrayEquals(expectedInverse[index], inverse[index], DOUBLEDELTA);
         }
     }
 
@@ -88,7 +89,7 @@ public class AnswerTest {
         double[][] inverse = Answer.invert(input);
 
         for (int index = 0; index < expectedInverse.length; ++index) {
-            Assert.assertArrayEquals(expectedInverse[index], inverse[index], 0.0000001);
+            Assert.assertArrayEquals(expectedInverse[index], inverse[index], DOUBLEDELTA);
         }
     }
 
@@ -111,7 +112,7 @@ public class AnswerTest {
         double[][] inverse = Answer.invert(input);
 
         for (int index = 0; index < expectedInverse.length; ++index) {
-            Assert.assertArrayEquals(expectedInverse[index], inverse[index], 0.0000001);
+            Assert.assertArrayEquals(expectedInverse[index], inverse[index], DOUBLEDELTA);
         }
     }
 
@@ -136,7 +137,7 @@ public class AnswerTest {
         double[][] inverse = Answer.invert(input);
 
         for (int index = 0; index < expectedInverse.length; ++index) {
-            Assert.assertArrayEquals(expectedInverse[index], inverse[index], 0.0000001);
+            Assert.assertArrayEquals(expectedInverse[index], inverse[index], DOUBLEDELTA);
         }
     }
 
@@ -163,7 +164,7 @@ public class AnswerTest {
         double[][] inverse = Answer.invert(input);
 
         for (int index = 0; index < expectedInverse.length; ++index) {
-            Assert.assertArrayEquals(expectedInverse[index], inverse[index], 0.0000001);
+            Assert.assertArrayEquals(expectedInverse[index], inverse[index], DOUBLEDELTA);
         }
     }
 
@@ -192,7 +193,7 @@ public class AnswerTest {
         double[][] inverse = Answer.invert(input);
 
         for (int index = 0; index < expectedInverse.length; ++index) {
-            Assert.assertArrayEquals(expectedInverse[index], inverse[index], 0.0000001);
+            Assert.assertArrayEquals(expectedInverse[index], inverse[index], DOUBLEDELTA);
         }
     }
 
@@ -210,5 +211,29 @@ public class AnswerTest {
     @Test
     public void transitionProbabilityTest() {
         Assert.assertEquals(3/7D, Answer.getTransitionProbability(caseAinput, 1, 3), 0.0000001);
+    }
+
+    @Test
+    public void getTransitionProbabilitiesCaseATest() {
+        double[][] probabilities = Answer.getTransitionProbabilities(caseAinput, new int[]{0, 1});
+        double[][] expected = new double[][]{
+                {0D, 2/3D},
+                {0D, 0D}
+        };
+        for (int index = 0; index < probabilities.length; ++index) {
+            Assert.assertArrayEquals(expected[index], probabilities[index], DOUBLEDELTA);
+        }
+    }
+
+    @Test
+    public void getTransitionProbabilitiesCaseBTest() {
+        double[][] probabilities = Answer.getTransitionProbabilities(caseBinput, new int[]{0, 1});
+        double[][] expected = new double[][]{
+                {0D, 1/2D},
+                {4/9D, 0D}
+        };
+        for (int index = 0; index < probabilities.length; ++index) {
+            Assert.assertArrayEquals(expected[index], probabilities[index], DOUBLEDELTA);
+        }
     }
 }
