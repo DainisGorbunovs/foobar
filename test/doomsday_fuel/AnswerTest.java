@@ -242,7 +242,7 @@ public class AnswerTest {
         double[][] F = Answer.getTransitionProbabilities(caseAinput, new int[]{0, 1});
         double[][] probabilities = Answer.getReachingProbabilities(F);
         double[][] expected = new double[][]{
-                {1D, -2/3D},
+                {1D, 2/3D},
                 {0D, 1D}
         };
         for (int index = 0; index < probabilities.length; ++index) {
@@ -255,8 +255,8 @@ public class AnswerTest {
         double[][] F = Answer.getTransitionProbabilities(caseBinput, new int[]{0, 1});
         double[][] probabilities = Answer.getReachingProbabilities(F);
         double[][] expected = new double[][]{
-                {1D, -1/2D},
-                {-4/9D, 1D}
+                {9/7D, 9/14D},
+                {4/7D, 9/7D}
         };
         for (int index = 0; index < probabilities.length; ++index) {
             Assert.assertArrayEquals(expected[index], probabilities[index], DOUBLEDELTA);
@@ -310,5 +310,8 @@ public class AnswerTest {
         for (int index = 0; index < multiplied.length; ++index) {
             Assert.assertArrayEquals(expected[index], multiplied[index], DOUBLEDELTA);
         }
+
+        // Least common denominator
+        Assert.assertEquals(21, Answer.leastCommonMultiple(Answer.getFractionDenominators(multiplied[0])));
     }
 }
