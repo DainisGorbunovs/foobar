@@ -1,5 +1,8 @@
 package doomsday_fuel;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /*
     Reusing functions of other people as in real world this challenge is solved using libraries.
     Also no need to reinvent the wheel.
@@ -199,7 +202,46 @@ public class Answer {
         }
     }
 
+    static final int TERMINAL_NODE = 0;
+    static final int TRANSITION_NODE = 1;
+    static int[][] separateTransitionTerminalNodes(int[][] matrix) {
+        List<Integer> terminalNodesList = new LinkedList<>();
+        List<Integer> transitionNodesList = new LinkedList<>();
+
+        int i = 0;
+        for (int[] row : matrix) {
+            boolean terminal = true;
+            for (int column : row) {
+                if (column != 0) {
+                    terminal = false;
+                    break;
+                }
+            }
+            if (terminal) {
+                terminalNodesList.add(i);
+            } else {
+                transitionNodesList.add(i);
+            }
+            i++;
+        }
+
+        int[][] separated = new int[2][];
+        separated[TERMINAL_NODE] = new int[terminalNodesList.size()];
+        separated[TRANSITION_NODE] = new int[transitionNodesList.size()];
+
+        i = 0;
+        for (int value : terminalNodesList)
+            separated[TERMINAL_NODE][i++] = value;
+
+        i = 0;
+        for (int value : transitionNodesList)
+            separated[TRANSITION_NODE][i++] = value;
+
+        return separated;
+    }
+
     public static int[] answer(int[][] m) {
+
         return null;
     }
 }

@@ -4,35 +4,37 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class AnswerTest {
+    int[][] caseAinput = new int[][]{
+            {0, 2, 1, 0, 0},
+            {0, 0, 0, 3, 4},
+            {0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0}
+    };
+
+    int[][] caseBinput = new int[][]{
+            {0, 1, 0, 0, 0, 1},
+            {4, 0, 0, 3, 2, 0},
+            {0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0}
+    };
+
     @Test
     public void caseATest() {
-        int[][] input = new int[][]{
-                {0, 2, 1, 0, 0},
-                {0, 0, 0, 3, 4},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0}
-        };
         int[] expected = new int[]{
                 7, 6, 8, 21
         };
-        Assert.assertArrayEquals(expected, Answer.answer(input));
+        Assert.assertArrayEquals(expected, Answer.answer(caseAinput));
     }
 
     @Test
     public void caseBTest() {
-        int[][] input = new int[][]{
-                {0, 1, 0, 0, 0, 1},
-                {4, 0, 0, 3, 2, 0},
-                {0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0}
-        };
         int[] expected = new int[]{
                 0, 3, 2, 9, 14
         };
-        Assert.assertArrayEquals(expected, Answer.answer(input));
+        Assert.assertArrayEquals(expected, Answer.answer(caseBinput));
     }
 
     @Test
@@ -192,5 +194,16 @@ public class AnswerTest {
         for (int index = 0; index < expectedInverse.length; ++index) {
             Assert.assertArrayEquals(expectedInverse[index], inverse[index], 0.0000001);
         }
+    }
+
+    @Test
+    public void separateTransitionTerminalNodesTest() {
+        int[][] separatedCaseANodes = Answer.separateTransitionTerminalNodes(caseAinput);
+        Assert.assertArrayEquals(new int[]{2,3,4}, separatedCaseANodes[Answer.TERMINAL_NODE]);
+        Assert.assertArrayEquals(new int[]{0, 1}, separatedCaseANodes[Answer.TRANSITION_NODE]);
+
+        int[][] separatedCaseBNodes = Answer.separateTransitionTerminalNodes(caseBinput);
+        Assert.assertArrayEquals(new int[]{2,3,4,5}, separatedCaseBNodes[Answer.TERMINAL_NODE]);
+        Assert.assertArrayEquals(new int[]{0, 1}, separatedCaseBNodes[Answer.TRANSITION_NODE]);
     }
 }
