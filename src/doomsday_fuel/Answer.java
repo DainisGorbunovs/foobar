@@ -356,6 +356,10 @@ public class Answer {
     }
 
     public static int[] answer(int[][] m) {
+        if (m.length == 1) {
+            return new int[]{0, 1};
+        }
+
         // Find transitional and terminal nodes
         int[][] nodeTypes = separateTransitionTerminalNodes(m);
 
@@ -370,27 +374,12 @@ public class Answer {
         // FR = (I-Q)^-1 * R, probabilities of reaching the terminal states
         double[][] FR = multiplyMatrix(F, R);
 
-//        if (m.length == 5)
-//            System.out.println("CASE A");
-//        else
-//            System.out.println("CASE B");
-//
-//        for (double[] row : FR) {
-//            for (double column : row) {
-//                System.out.print(column + " ");
-//            }
-//            System.out.println();
-//        }
-
         int leastCommonDenominator = Answer.leastCommonMultiple(Answer.getFractionDenominators(FR[0]));
 
         int[] answer = new int[FR[0].length + 1];
         answer[FR[0].length] = leastCommonDenominator;
-//        System.out.println("Denominator : " + leastCommonDenominator);
 
         for (int index = 0; index < FR[0].length; ++index) {
-//            System.out.printf("%f, multiplied by %d is %d\n", FR[0][index], leastCommonDenominator,
-//                    (int) Math.round(FR[0][index]*leastCommonDenominator));
             answer[index] = (int) Math.round(FR[0][index]*leastCommonDenominator);
         }
 
