@@ -236,4 +236,30 @@ public class AnswerTest {
             Assert.assertArrayEquals(expected[index], probabilities[index], DOUBLEDELTA);
         }
     }
+
+    @Test
+    public void getReachingProbabilitiesCaseATest() {
+        double[][] F = Answer.getTransitionProbabilities(caseAinput, new int[]{0, 1});
+        double[][] probabilities = Answer.getReachingProbabilities(F);
+        double[][] expected = new double[][]{
+                {1D, -2/3D},
+                {0D, 1D}
+        };
+        for (int index = 0; index < probabilities.length; ++index) {
+            Assert.assertArrayEquals(expected[index], probabilities[index], DOUBLEDELTA);
+        }
+    }
+
+    @Test
+    public void getReachingProbabilitiesCaseBTest() {
+        double[][] F = Answer.getTransitionProbabilities(caseBinput, new int[]{0, 1});
+        double[][] probabilities = Answer.getReachingProbabilities(F);
+        double[][] expected = new double[][]{
+                {1D, -1/2D},
+                {-4/9D, 1D}
+        };
+        for (int index = 0; index < probabilities.length; ++index) {
+            Assert.assertArrayEquals(expected[index], probabilities[index], DOUBLEDELTA);
+        }
+    }
 }

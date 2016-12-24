@@ -283,13 +283,23 @@ public class Answer {
     }
 
     /**
-     * WIP
-     * @param F
-     * @return
+     * Get reaching probabilities
+     * @param F Transitioning probabilities
+     * @return F matrix
      */
     static double[][] getReachingProbabilities(double[][] F) {
-        double[][] identitySubtractF = F;
+        double[][] identitySubtractF = new double[F.length][F.length];
 
+        for (int row = 0; row < F.length; ++row) {
+            for (int column = 0; column < F.length; ++column) {
+                identitySubtractF[row][column] = -F[row][column];
+
+                // Add identity matrix
+                if (row == column) {
+                    identitySubtractF[row][column]++;
+                }
+            }
+        }
         return identitySubtractF;
     }
 
@@ -302,8 +312,9 @@ public class Answer {
         // R: probability of transitioning from some transient state to some absorbing state.
 
         // F = (I-Q)^-1, the expected probabilities reaching transient states from transient states
-        // FR = (I-Q)^-1 * R, probabilities of reaching the terminal states
         double[][] F = getReachingProbabilities(Q);
+
+        // FR = (I-Q)^-1 * R, probabilities of reaching the terminal states
 
 
         return null;
