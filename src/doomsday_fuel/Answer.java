@@ -356,8 +356,9 @@ public class Answer {
     }
 
     public static int[] answer(int[][] m) {
+        // If matrix is 1x1, then probability is 100%
         if (m.length == 1) {
-            return new int[]{0, 1};
+            return new int[]{1, 1};
         }
 
         // Find transitional and terminal nodes
