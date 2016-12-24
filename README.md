@@ -1,4 +1,17 @@
 # foobar
+## Tags
+While they have removed option to check for `tags`, it is possible to request a challenge from any of these 
+tags by writing `request <tag>`, e.g. `request algo`. 
+```
+foobar:~/ programmer$ tags
+Requesting tags...
+algo            algorithms
+data_struct     data structures
+low_level       low-level representation (binary representations, endianness)
+math            math
+crypto          security and cryptography
+```
+
 
 ## Tasks: round #1
 ### Level 1
