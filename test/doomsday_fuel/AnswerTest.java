@@ -262,4 +262,30 @@ public class AnswerTest {
             Assert.assertArrayEquals(expected[index], probabilities[index], DOUBLEDELTA);
         }
     }
+
+    @Test
+    public void getAbsorbingProbabilitiesCaseATest() {
+        double[][] R = Answer.getAbsorbingProbabilities(caseAinput, new int[]{0,1}, new int[]{2,3,4});
+        double[][] expected = new double[][]{
+                {1/3D, 0D, 0D},
+                {0D, 3/7D, 4/7D}
+        };
+
+        for (int index = 0; index < R.length; ++index) {
+            Assert.assertArrayEquals(expected[index], R[index], DOUBLEDELTA);
+        }
+    }
+
+    @Test
+    public void getAbsorbingProbabilitiesCaseBTest() {
+        double[][] R = Answer.getAbsorbingProbabilities(caseBinput, new int[]{0,1}, new int[]{2,3,4,5});
+        double[][] expected = new double[][]{
+                {0D, 0D, 0D, 1/2D},
+                {0D, 3/9D, 2/9D, 0D}
+        };
+
+        for (int index = 0; index < R.length; ++index) {
+            Assert.assertArrayEquals(expected[index], R[index], DOUBLEDELTA);
+        }
+    }
 }
