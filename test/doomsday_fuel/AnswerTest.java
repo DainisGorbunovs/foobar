@@ -288,4 +288,27 @@ public class AnswerTest {
             Assert.assertArrayEquals(expected[index], R[index], DOUBLEDELTA);
         }
     }
+
+    @Test
+    public void multiplyMatrixTest() {
+        double[][] first = new double[][]{
+                {1D, 2/3D},
+                {0D, 1D}
+        };
+
+        double[][] second = new double[][]{
+                {1/3D, 0D, 0D},
+                {0D, 3/7D, 4/7D}
+        };
+
+        double[][] expected = new double[][]{
+                {1/3D, 2/7D, 8/21D},
+                {0D, 3/7D, 4/7D}
+        };
+
+        double[][] multiplied = Answer.multiplyMatrix(first, second);
+        for (int index = 0; index < multiplied.length; ++index) {
+            Assert.assertArrayEquals(expected[index], multiplied[index], DOUBLEDELTA);
+        }
+    }
 }

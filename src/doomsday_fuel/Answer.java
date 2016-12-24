@@ -333,6 +333,26 @@ public class Answer {
         return probabilities;
     }
 
+    /**
+     * Multiplies a matrix with another matrix
+     * @param first Matrix with double values
+     * @param second Matrix with double values
+     * @return Product of both matrices
+     */
+    static double[][] multiplyMatrix(double[][] first, double[][] second) {
+        double[][] result = new double[first.length][second[0].length];
+
+        for (int i = 0; i < first.length; ++i) {
+            for (int j = 0; j < second[0].length; ++j) {
+                for (int k = 0; k < first[0].length; ++k) {
+                    result[i][j] += first[i][k] * second[k][j];
+                }
+            }
+        }
+
+        return result;
+    }
+
     public static int[] answer(int[][] m) {
         // Find transitional and terminal nodes
         int[][] nodeTypes = separateTransitionTerminalNodes(m);
@@ -340,12 +360,13 @@ public class Answer {
         // Q: probability of transitioning from some transient state to another
         double[][] Q = getTransitionProbabilities(m, nodeTypes[TRANSITION_NODE]);
         // R: probability of transitioning from some transient state to some absorbing state.
-        double[][] R = getAbsorbingProbabilities(m, nodeTypes[TRANSITION_NODE], nodeTypes[TERMINAL_NODE])
+        double[][] R = getAbsorbingProbabilities(m, nodeTypes[TRANSITION_NODE], nodeTypes[TERMINAL_NODE]);
 
         // F = (I-Q)^-1, the expected probabilities reaching transient states from transient states
         double[][] F = getReachingProbabilities(Q);
 
         // FR = (I-Q)^-1 * R, probabilities of reaching the terminal states
+        double[][] FR = multiplyMatrix(F, R);
 
         // Redundancy because of int / double type:
         // getTransitionProbability()
