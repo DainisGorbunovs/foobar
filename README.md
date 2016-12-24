@@ -55,3 +55,6 @@ MergeSort with a comparator.
 
 >For a world-destroying despot with a penchant for making space-station-sized doomsday devices, Commander Lambda sure has good taste in office furniture. As her personal assistant, you have the latest in standing desk and ergonomic chair technology, and it sure makes a difference!
 * [`doomsday_fuel`](tasks/doomsday_fuel) time given: 96 hours
+
+>There are a lot of difficult things about being undercover as Commander Lambda's personal assistant, but you have to say, the personal spa and private hot cocoa bar are pretty awesome.
+* [`find_the_access_codes`](tasks/find_the_access_codes) time given: 96 hours
