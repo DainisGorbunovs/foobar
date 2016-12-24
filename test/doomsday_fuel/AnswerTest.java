@@ -53,13 +53,13 @@ public class AnswerTest {
     @Test
     public void matrixTests() {
         double[][] input = new double[][]{
-                {1D, 2D},
-                {3D, 4D}
+                {1D, -1/2D},
+                {-4/9D, 1D}
         };
 
         double[][] expectedInverse = new double[][]{
-                {-2D, 1D},
-                {1.5D, -0.5D}
+                {9/7D, 9/14D},
+                {4/7D, 9/7D}
         };
 
         double[][] inverse = Answer.invert(input);
