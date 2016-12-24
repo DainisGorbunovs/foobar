@@ -206,4 +206,9 @@ public class AnswerTest {
         Assert.assertArrayEquals(new int[]{2,3,4,5}, separatedCaseBNodes[Answer.TERMINAL_NODE]);
         Assert.assertArrayEquals(new int[]{0, 1}, separatedCaseBNodes[Answer.TRANSITION_NODE]);
     }
+
+    @Test
+    public void transitionProbabilityTest() {
+        Assert.assertEquals(3/7D, Answer.getTransitionProbability(caseAinput, 1, 3), 0.0000001);
+    }
 }

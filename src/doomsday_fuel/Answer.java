@@ -202,6 +202,11 @@ public class Answer {
         }
     }
 
+    /**
+     * Find transition and terminal nodes in matrix
+     * @param matrix Matrix array
+     * @return In TERMINAL_NODE - terminal nodes, in TRANSITION_NODE - transition nodes
+     */
     static final int TERMINAL_NODE = 0;
     static final int TRANSITION_NODE = 1;
     static int[][] separateTransitionTerminalNodes(int[][] matrix) {
@@ -240,7 +245,27 @@ public class Answer {
         return separated;
     }
 
+    /**
+     * Finds the probability of reaching a node via a certain node
+     * @param m Matrix
+     * @param fromNode Transitioning from node
+     * @param toNode Transitioning to node
+     * @return Probability of reaching the node
+     */
+    static double getTransitionProbability(int[][] m, int fromNode, int toNode) {
+        int count = 0;
+        for (int times : m[fromNode]) {
+            count += times;
+        }
+        return (double) m[fromNode][toNode] / count;
+    }
+
     public static int[] answer(int[][] m) {
+        // Q: probability of transitioning from some transient state to another
+        // R: probability of transitioning from some transient state to some absorbing state.
+
+        // F = (I-Q)^-1, the expected probabilities reaching transient states from transient states
+        // FR = (I-Q)^-1 * R, probabilities of reaching the terminal states
 
         return null;
     }
