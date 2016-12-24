@@ -49,4 +49,23 @@ public class AnswerTest {
         Assert.assertEquals(14, Answer.leastCommonMultiple(Answer.getFractionDenominators(new double[]{3.0/14, 1.0/7,
                 9.0/14})));
     }
+
+    @Test
+    public void matrixTests() {
+        double[][] input = new double[][]{
+                {1D, 2D},
+                {3D, 4D}
+        };
+
+        double[][] expectedInverse = new double[][]{
+                {-2D, 1D},
+                {1.5D, -0.5D}
+        };
+
+        double[][] inverse = Answer.invert(input);
+
+        for (int index = 0; index < expectedInverse.length; ++index) {
+            Assert.assertArrayEquals(expectedInverse[index], inverse[index], 0.0000001);
+        }
+    }
 }
