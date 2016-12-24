@@ -55,11 +55,12 @@ public class Answer {
     }
 
     /**
+     * Max limit for denominator is 1'000'000
      * @param decimal Decimal number
      * @return Denominator
      */
     static int getFractionDenominator(double decimal) {
-        return getFractionDenominator(decimal, Integer.MAX_VALUE);
+        return getFractionDenominator(decimal, 1000000);
     }
 
     /**

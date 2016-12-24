@@ -37,6 +37,7 @@ public class AnswerTest {
 
     @Test
     public void fractionTests() {
+        Assert.assertEquals(17, Answer.getFractionDenominator(0.2352941));
         Assert.assertEquals(7, Answer.getFractionDenominator(2.0/7));
         Assert.assertEquals(14, Answer.getFractionDenominator(9.0/14));
 
