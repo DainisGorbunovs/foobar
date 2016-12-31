@@ -193,17 +193,17 @@ public class AnswerTest {
         Assert.assertArrayEquals(new int[]{1, 2, 3}, Answer.answer(times, 7));
     }
 
-    @Test
-    public void isExitDirectlyReachableTest() {
-        int[][] times = new int[][]{
-                {0, 1, 1, 1, 1},
-                {1, 0, 1, 1, 1},
-                {1, 1, 0, 1, 1},
-                {1, 1, 1, 0, 1},
-                {1, 1, 1, 1, 0}
-        };
-
-        Assert.assertTrue(Answer.isExitDirectlyReachable(times, 1, 1));
-        Assert.assertFalse(Answer.isExitDirectlyReachable(times, 0, 1));
-    }
+//    @Test
+//    public void isExitDirectlyReachableTest() {
+//        int[][] times = new int[][]{
+//                {0, 1, 1, 1, 1},
+//                {1, 0, 1, 1, 1},
+//                {1, 1, 0, 1, 1},
+//                {1, 1, 1, 0, 1},
+//                {1, 1, 1, 1, 0}
+//        };
+//
+//        Assert.assertTrue(Answer.isExitDirectlyReachable(times, 1, 1));
+//        Assert.assertFalse(Answer.isExitDirectlyReachable(times, 0, 1));
+//    }
 }

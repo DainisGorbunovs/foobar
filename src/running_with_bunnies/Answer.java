@@ -1,69 +1,54 @@
 package running_with_bunnies;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Answer {
-    /**
-     * Gets the number of time slices it costs to move from a location to another
-     * @param times Matrix of times
-     * @param from Position to move from
-     * @param to Position to move to
-     * @return Cost of time slices to move
-     */
-    static int getMoveTimeCost(int[][] times, int from, int to) {
-        return times[from][to];
-    }
+//    /**
+//     * Gets the number of time slices it costs to move from a location to another
+//     * @param times Matrix of times
+//     * @param from Position to move from
+//     * @param to Position to move to
+//     * @return Cost of time slices to move
+//     */
+//    static int getMoveTimeCost(int[][] times, int from, int to) {
+//        return times[from][to];
+//    }
+//
+//    /**
+//     * Tells if exit can be reached directly from the current position
+//     *
+//     * @param times Matrix of times
+//     * @param time_limit Time slices left
+//     * @param position 0-start, 1-0th bunny, 2-1st bunny.. last-exit
+//     * @return true, if can reach exit directly
+//     */
+//    static boolean isExitDirectlyReachable(int[][] times, int time_limit, int position) {
+//        return time_limit >= getMoveTimeCost(times, position, times.length-1);
+//    }
 
-    /**
-     * Tells if exit can be reached directly from the current position
-     *
-     * @param times Matrix of times
-     * @param time_limit Time slices left
-     * @param position 0-start, 1-0th bunny, 2-1st bunny.. last-exit
-     * @return true, if can reach exit directly
-     */
-    static boolean isExitDirectlyReachable(int[][] times, int time_limit, int position) {
-        return time_limit >= getMoveTimeCost(times, position, times.length-1);
-    }
-
-    /**
-     * Prints times matrix for debugging purposes
-     * @param times Matrix of times
-     */
-    static void printTimes(int[][] times) {
-        System.out.println("[");
-
-        for (int row = 0; row < times.length; ++row) {
-            System.out.print("    ");
-
-            for (int column = 0; column < times[0].length; ++column) {
-                System.out.print(times[row][column]);
-
-                if (column != times[0].length - 1 || row != times.length - 1) {
-                    System.out.print(",");
-                }
-                System.out.print(" ");
-            }
-            System.out.println();
-        }
-
-        System.out.println("]");
-    }
-
-    /**
-     * Turns list of bunnies into an array of bunnies
-     * @param bunnies List of bunnies
-     * @return Array of bunnies
-     */
-    static int[] getArrayOfSavedBunnies(List<Integer> bunnies) {
-        int[] array = new int[bunnies.size()];
-        int index = 0;
-        for (Integer bunny : bunnies) {
-            array[index++] = bunny;
-        }
-        return array;
-    }
+//    /**
+//     * Prints times matrix for debugging purposes
+//     * @param times Matrix of times
+//     */
+//    static void printTimes(int[][] times) {
+//        System.out.println("[");
+//
+//        for (int row = 0; row < times.length; ++row) {
+//            System.out.print("    ");
+//
+//            for (int column = 0; column < times[0].length; ++column) {
+//                System.out.print(times[row][column]);
+//
+//                if (column != times[0].length - 1 || row != times.length - 1) {
+//                    System.out.print(",");
+//                }
+//                System.out.print(" ");
+//            }
+//            System.out.println();
+//        }
+//
+//        System.out.println("]");
+//    }
 
     /**
      * Gets the shortest time from A to B via C (route: A-C-B).
@@ -108,21 +93,19 @@ public class Answer {
      * Checks all possible path combinations to find the shortest times
      * from A to B via any other route.
      * Complexity O(n^3). As max n is only 7, it is not too slow.
+     *
+     * E.g., running times and paths from S to E.
+     * S-E can be 99 time units
+     * S-E: S-0-E 98 time units
+     * S-E: S-0-1-E 30 time units
+     * S-E: S-0-1-2-E 15 time units
+     * S-E: S-0-1-2-3-E 5 time units
+     * S-E: S-0-1-2-3-4-E 0 time units
+
      * @param times Matrix of times
      * @return Matrix of shortest times
      */
     static int[][] getShortestTimes(int[][] times) {
-        /*
-            E.g.,
-            S-E can be 99 time units
-            S-E: S-0-E 98 time units
-            S-E: S-0-1-E 30 time units
-            S-E: S-0-1-2-E 15 time units
-            S-E: S-0-1-2-3-E 5 time units
-            S-E: S-0-1-2-3-4-E 0 time units
-         */
-
-
         for (int bunny = 0; bunny < times.length - 2; ++bunny) {
             times = getShorterTimes(times);
         }
@@ -145,24 +128,102 @@ public class Answer {
         return false;
     }
 
+    // http://stackoverflow.com/questions/20906214/permutation-algorithm-for-array-of-integers-in-java
+    static int[] getBunnyPath(int selectedBunnyCount, int[] bunnies, int[][] times, int timeLeft) {
+        int allBunnyCount = bunnies.length;
+
+        for (int i = 0; i < Math.pow(allBunnyCount, selectedBunnyCount); i++) {
+            int[] permutation = new int[selectedBunnyCount];
+            Set<Integer> values = new HashSet<>();
+            boolean hasDupes = false;
+            for (int j = 0; j < selectedBunnyCount; j++) {
+                // Pick the appropriate item from the item pool given j and i
+                int itemPoolIndex = (int) Math.floor((double) (i % (int) Math.pow(allBunnyCount, j + 1)) / (int) Math.pow(allBunnyCount, j));
+                permutation[selectedBunnyCount - 1 - j] = bunnies[itemPoolIndex];
+                if (values.contains(bunnies[itemPoolIndex])) {
+                    hasDupes = true;
+                    break;
+                }
+                values.add(bunnies[itemPoolIndex]);
+            }
+
+            if (hasDupes)
+                continue;
+
+            if (isSolvable(permutation, selectedBunnyCount, times, timeLeft)) {
+                return permutation;
+            }
+        }
+
+        return new int[]{};
+    }
+
+    static int[] getSavedBunnies(int[] bunnies, int bunnyCount) {
+        int[] savedBunnies = Arrays.copyOfRange(bunnies, 0, bunnyCount);
+
+        Arrays.sort(savedBunnies);
+        return savedBunnies;
+    }
+
+    static boolean isSolvable(int[] bunnyOrder, int bunnyCount, int[][] times, int timeLeft) {
+        // S - 0/1/2/3/4, find time to first bunny
+        // System.out.printf("Time left: %d, bunny count: %d\n", timeLeft, bunnyCount);
+        // System.out.printf("S-%d: %d, left: %d\n", bunnyOrder[0], times[0][bunnyOrder[0] + 1],
+        //        timeLeft-times[0][bunnyOrder[0] + 1]);
+
+        timeLeft -= times[0][bunnyOrder[0] + 1];
+
+        // 0 - 1, 3 - 2, and other route times subtracted
+        for (int index = 0; index < bunnyCount - 1; ++index) {
+            // System.out.printf("%d-%d: %d, left: %d\n", bunnyOrder[index], bunnyOrder[index+1],
+            //        times[bunnyOrder[index]][bunnyOrder[index+1]], timeLeft - times[bunnyOrder[index] +
+            //        1][bunnyOrder[index+1] + 1]);
+            timeLeft -= times[bunnyOrder[index] + 1][bunnyOrder[index+1] + 1];
+        }
+
+        // [0, 1, 2, 3] has 4 bunnies, find time to exit
+        // System.out.printf("%d-E: %d, left: %d\n", bunnyOrder[bunnyCount - 1],
+        //         times[bunnyOrder[bunnyCount - 1] + 1][times.length - 1],
+        //         timeLeft - times[bunnyOrder[bunnyCount - 1] + 1][times.length - 1]);
+        timeLeft -= times[bunnyOrder[bunnyCount - 1] + 1][times.length - 1];
+
+        return timeLeft >= 0;
+    }
+
     public static int[] answer(int[][] times, int time_limit) {
+        // Number of saved bunnies
+        int bunnyCount = times.length - 2;
+
         // Have a list of saved bunnies
-        List<Integer> savedBunnies = new LinkedList<>();
+        int[] savedBunnies = new int[bunnyCount];
+
+        // Fill saved bunnies list full
+        for (int bunny = 0; bunny < bunnyCount; ++bunny) {
+            savedBunnies[bunny] = bunny;
+        }
 
         // Simplify the times matrix by finding alternative routes
         times = getShortestTimes(times);
 
         // If has infinite cycle, return all bunnies
         if (hasInfiniteCycle(times)) {
-            for (int bunny = 0; bunny < times.length - 2; ++bunny) {
-                savedBunnies.add(bunny);
+            return savedBunnies;
+        }
+
+        // Try to save as many bunnies as possible, start from 5
+        // S-MIDDLE-E
+        for (; bunnyCount > 0; --bunnyCount) {
+            // Loop through all permutations:
+            // if solvable, break
+            int[] myList = getBunnyPath(bunnyCount, savedBunnies, times, time_limit);
+
+            if (myList.length != 0) {
+                savedBunnies = myList;
+                break;
             }
         }
 
-        // Print times for debugging purposes
-        printTimes(times);
-
         // Save no bunnies if time does not allow
-        return getArrayOfSavedBunnies(savedBunnies);
+        return getSavedBunnies(savedBunnies, bunnyCount);
     }
 }
