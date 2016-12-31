@@ -1,55 +1,10 @@
 package running_with_bunnies;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Answer {
-//    /**
-//     * Gets the number of time slices it costs to move from a location to another
-//     * @param times Matrix of times
-//     * @param from Position to move from
-//     * @param to Position to move to
-//     * @return Cost of time slices to move
-//     */
-//    static int getMoveTimeCost(int[][] times, int from, int to) {
-//        return times[from][to];
-//    }
-//
-//    /**
-//     * Tells if exit can be reached directly from the current position
-//     *
-//     * @param times Matrix of times
-//     * @param time_limit Time slices left
-//     * @param position 0-start, 1-0th bunny, 2-1st bunny.. last-exit
-//     * @return true, if can reach exit directly
-//     */
-//    static boolean isExitDirectlyReachable(int[][] times, int time_limit, int position) {
-//        return time_limit >= getMoveTimeCost(times, position, times.length-1);
-//    }
-
-//    /**
-//     * Prints times matrix for debugging purposes
-//     * @param times Matrix of times
-//     */
-//    static void printTimes(int[][] times) {
-//        System.out.println("[");
-//
-//        for (int row = 0; row < times.length; ++row) {
-//            System.out.print("    ");
-//
-//            for (int column = 0; column < times[0].length; ++column) {
-//                System.out.print(times[row][column]);
-//
-//                if (column != times[0].length - 1 || row != times.length - 1) {
-//                    System.out.print(",");
-//                }
-//                System.out.print(" ");
-//            }
-//            System.out.println();
-//        }
-//
-//        System.out.println("]");
-//    }
-
     /**
      * Gets the shortest time from A to B via C (route: A-C-B).
      * @param times Matrix of times
@@ -57,7 +12,7 @@ public class Answer {
      * @param to To position
      * @return Shortest time in from-catalyst-to route
      */
-    static int getShorterFromToTime(int[][] times, int from, int to) {
+    private static int getShorterFromToTime(int[][] times, int from, int to) {
         int leastTime = times[from][to];
 
         for (int otherTo = 0; otherTo < times[0].length; ++otherTo) {
@@ -80,7 +35,7 @@ public class Answer {
      * @param times Matrix of times
      * @return Matrix of simplified times
      */
-    static int[][] getShorterTimes(int[][] times) {
+    private static int[][] getShorterTimes(int[][] times) {
         for (int from = 0; from < times.length; ++from) {
             for (int to = 0; to < times[0].length; ++to) {
                 times[from][to] = getShorterFromToTime(times, from, to);
@@ -105,7 +60,7 @@ public class Answer {
      * @param times Matrix of times
      * @return Matrix of shortest times
      */
-    static int[][] getShortestTimes(int[][] times) {
+    private static int[][] getShortestTimes(int[][] times) {
         for (int bunny = 0; bunny < times.length - 2; ++bunny) {
             times = getShorterTimes(times);
         }
@@ -118,7 +73,7 @@ public class Answer {
      * @param times Matrix of times
      * @return true if has infinite cycle
      */
-    static boolean hasInfiniteCycle(int[][] times) {
+    private static boolean hasInfiniteCycle(int[][] times) {
         for (int element = 0; element < times.length; ++element) {
             if (times[element][element] < 0) {
                 return true;
@@ -128,8 +83,21 @@ public class Answer {
         return false;
     }
 
-    // http://stackoverflow.com/questions/20906214/permutation-algorithm-for-array-of-integers-in-java
-    static int[] getBunnyPath(int selectedBunnyCount, int[] bunnies, int[][] times, int timeLeft) {
+    //
+
+    /**
+     * Find the best bunnies possible to be saved.
+     *
+     * Permutation algorithm adapted from rjberg7's code
+     * http://stackoverflow.com/questions/20906214/permutation-algorithm-for-array-of-integers-in-java
+     *
+     * @param selectedBunnyCount Number of bunnies to save
+     * @param bunnies Possible bunnies in the map
+     * @param times Matrix of times
+     * @param timeLeft Time left
+     * @return Best bunnies possible to save
+     */
+    private static int[] getBunnyPath(int selectedBunnyCount, int[] bunnies, int[][] times, int timeLeft) {
         int allBunnyCount = bunnies.length;
 
         for (int i = 0; i < Math.pow(allBunnyCount, selectedBunnyCount); i++) {
@@ -158,14 +126,28 @@ public class Answer {
         return new int[]{};
     }
 
-    static int[] getSavedBunnies(int[] bunnies, int bunnyCount) {
+    /**
+     * Gets the saved bunnies. They are sorted in ascending order.
+     * @param bunnies All possible bunnies
+     * @param bunnyCount Number of saved bunnies
+     * @return Saved bunnies
+     */
+    private static int[] getSavedBunnies(int[] bunnies, int bunnyCount) {
         int[] savedBunnies = Arrays.copyOfRange(bunnies, 0, bunnyCount);
 
         Arrays.sort(savedBunnies);
         return savedBunnies;
     }
 
-    static boolean isSolvable(int[] bunnyOrder, int bunnyCount, int[][] times, int timeLeft) {
+    /**
+     * Checks if with the current bunny order the map can be solved in time.
+     * @param bunnyOrder The order of bunnies
+     * @param bunnyCount Number of saved bunnies
+     * @param times Matrix of times
+     * @param timeLeft Time left
+     * @return
+     */
+    private static boolean isSolvable(int[] bunnyOrder, int bunnyCount, int[][] times, int timeLeft) {
         // S - 0/1/2/3/4, find time to first bunny
         // System.out.printf("Time left: %d, bunny count: %d\n", timeLeft, bunnyCount);
         // System.out.printf("S-%d: %d, left: %d\n", bunnyOrder[0], times[0][bunnyOrder[0] + 1],
@@ -215,10 +197,11 @@ public class Answer {
         for (; bunnyCount > 0; --bunnyCount) {
             // Loop through all permutations:
             // if solvable, break
-            int[] myList = getBunnyPath(bunnyCount, savedBunnies, times, time_limit);
+            int[] bunnyPath = getBunnyPath(bunnyCount, savedBunnies, times, time_limit);
 
-            if (myList.length != 0) {
-                savedBunnies = myList;
+
+            if (bunnyPath.length != 0) {
+                savedBunnies = bunnyPath;
                 break;
             }
         }
