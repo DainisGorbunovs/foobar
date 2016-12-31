@@ -51,10 +51,12 @@ crypto          security and cryptography
 
 ### Level 2
 >The latest gossip in the henchman breakroom is that "LAMBCHOP" stands for "Lambda's Anti-Matter Biofuel Collision Hadron Oxidating Potentiator". You're pretty sure it runs on diesel, not biofuel, but you can at least give the commander credit for trying.
+
 * [`lovely_lucky_lambs`](tasks/lovely_lucky_lambs) time given: 72 hours
 
 >At least all this time spent running errands all over Commander Lambda's space station have given you a really good 
 understanding of the station's layout. You'll need that when you're finally ready to destroy the LAMBCHOP and rescue the bunny prisoners.
+
 * [`elevator_maintenance`](tasks/elevator_maintenance) time given: 72 hours
 
 #### Notes
@@ -64,16 +66,21 @@ MergeSort with a comparator.
 >Awesome! Commander Lambda was so impressed by your efforts that she's made you her personal assistant. You'll be helping her directly with her work, which means you'll have access to all of her files-including the ones on the LAMBCHOP doomsday device. This is the chance you've been waiting for. Can you use your new access to finally topple Commander Lambda's evil empire?
 
 >Who the heck puts clover and coffee creamer in their tea? Commander Lambda, apparently. When you signed up to infiltrate her organization, you didn't think you'd get such an up-close and personal look at her more...unusual tastes.
+
 * [`bomb_baby`](tasks/bomb_baby) time given: 96 hours
 
 >For a world-destroying despot with a penchant for making space-station-sized doomsday devices, Commander Lambda sure has good taste in office furniture. As her personal assistant, you have the latest in standing desk and ergonomic chair technology, and it sure makes a difference!
+
 * [`doomsday_fuel`](tasks/doomsday_fuel) time given: 96 hours
 
 >There are a lot of difficult things about being undercover as Commander Lambda's personal assistant, but you have to say, the personal spa and private hot cocoa bar are pretty awesome.
+
 * [`find_the_access_codes`](tasks/find_the_access_codes) time given: 96 hours
 
 >Excellent! You've destroyed Commander Lambda's doomsday device and saved Bunny Planet! But there's one small problem: the LAMBCHOP was a wool-y important part of her space station, and when you blew it up, you triggered a chain reaction that's tearing the station apart. Can you rescue the imprisoned bunnies and escape before the entire thing explodes?
 
 ### Level 4
 >Six thousand, seven hundred and forty-one, six thousand, seven hundred and forty-two, six thousand, seven hundred and forty-three... Good grief! Just how many bunnies has Commander Lambda captured?!
+
 * [`running_with_bunnies`](tasks/running_with_bunnies) time given: 360 hours
+* _other challenge_ time given: ? hours
