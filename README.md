@@ -93,4 +93,11 @@ MergeSort with a comparator.
 >Oh no! You escaped Commander Lambda's exploding space station - but so did she, and she's definitely not happy with you. She's chasing you in her heavily-armed starfighter, while you and your bunny refugees are stuck in these lumbering escape pods. It'll take all your wits and cleverness to escape such a hare-y situation, so you'd better hop to it!
 
 ### Level 5
+> Uh-oh, your HUD shows half a dozen missiles headed your way. Better do a barrel roll!
+* [`disorderly-escape`](tasks/disorderly-escape) time given: 528 hours
+
+
 * _other challenge_ time given: ? hours
+
+Refer a friend: "https://foobar.withgoogle.com/?eid=8bNhY" (Unused)
+Refer a friend: "https://foobar.withgoogle.com/?eid=V9EL3" (Unused)
