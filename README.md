@@ -83,4 +83,14 @@ MergeSort with a comparator.
 >Six thousand, seven hundred and forty-one, six thousand, seven hundred and forty-two, six thousand, seven hundred and forty-three... Good grief! Just how many bunnies has Commander Lambda captured?!
 
 * [`running_with_bunnies`](tasks/running_with_bunnies) time given: 360 hours
+
+>Success! You've managed to infiltrate Commander Lambda's evil organization, and finally earned yourself an entry-level position as a Minion on her space station. From here, you just might be able to subvert her plans to use the LAMBCHOP doomsday device to destroy Bunny Planet. Problem is, Minions are the lowest of the low in the Lambda hierarchy. Better buck up and get working, or you'll never make it to the top...
+
+>It's a good thing bunnies are relatively small and light. You're pretty sure they're packing the escape pods well past the legal maximum occupancy.
+
+* [`escape_pods`](tasks/escape_pods) time given: 360 hours
+
+>Oh no! You escaped Commander Lambda's exploding space station - but so did she, and she's definitely not happy with you. She's chasing you in her heavily-armed starfighter, while you and your bunny refugees are stuck in these lumbering escape pods. It'll take all your wits and cleverness to escape such a hare-y situation, so you'd better hop to it!
+
+### Level 5
 * _other challenge_ time given: ? hours
