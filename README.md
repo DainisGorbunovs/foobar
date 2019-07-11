@@ -96,8 +96,15 @@ MergeSort with a comparator.
 > Uh-oh, your HUD shows half a dozen missiles headed your way. Better do a barrel roll!
 * [`disorderly-escape`](tasks/disorderly-escape) time given: 528 hours
 
+>With one last roar of the escape pod's engines, you and your bunny companions jump to lightspeed. Congratulations! You've destroyed the LAMBCHOP, rescued the bunnies, gotten Commander Lambda off your tail, and saved the galaxy. Time for a little rest and relaxation back on Bunny Planet. Pat yourself on the back - you've earned it!
 
-* _other challenge_ time given: ? hours
+```
+<encrypted>
+NUYeEE0vBAAHSUFXRWkGHwBPOEZfVEkCAgkiBAwCWylGU05ORggWOgQICEsoRl9USQQLAyETGRYJ bFtTUwcPDhcrBQQHQilGX1RJAA4NJwQbAEMpDwdTTltNQjsPAQpNJwQXU0JBShcvAw8MWj9GU05O Rh4EKARKSQ5rBxwbSUFXRWkWBAsPaxw=
+</encrypted>
+```
 
-Refer a friend: "https://foobar.withgoogle.com/?eid=8bNhY" (Unused)
-Refer a friend: "https://foobar.withgoogle.com/?eid=V9EL3" (Unused)
+Decrypted by [`encrypted_message`](src/encrypted_message/Decrypt.java):
+```
+{'success' : 'great', 'colleague' : 'esteemed', 'efforts' : 'incredible', 'achievement' : 'unlocked', 'rabbits' : 'safe', 'foo' : 'win!'}
+```
