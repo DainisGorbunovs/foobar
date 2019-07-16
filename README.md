@@ -12,6 +12,16 @@ math            math
 crypto          security and cryptography
 ```
 
+## Maven
+Maven (see [`pom.xml`](pom.xml)) is used to build the solutions of these challenges.
+
+Sample code to compile, run tests, run example code and remove the created files:
+```bash
+mvn compile
+mvn test
+(cd target/classes; java disorderly_escape.Solution)
+mvn clean
+```
 
 ## Tasks: round #1
 ### Level 1
@@ -108,3 +118,5 @@ Decrypted by [`encrypted_message`](src/encrypted_message/Decrypt.java):
 ```
 {'success' : 'great', 'colleague' : 'esteemed', 'efforts' : 'incredible', 'achievement' : 'unlocked', 'rabbits' : 'safe', 'foo' : 'win!'}
 ```
+
+* [`dodge-the-lasers`](tasks/dodge-the-lasers) time given: 528 hours

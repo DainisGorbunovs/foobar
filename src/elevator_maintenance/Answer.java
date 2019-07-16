@@ -1,5 +1,6 @@
 package elevator_maintenance;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -57,7 +58,9 @@ public class Answer {
 
     private static <T> void merge(T[] array, int left, int middle, int right, Comparator<? super T> comparator) {
         int n = right - left + 1;
-        Object[] values = new Object[n];
+
+        @SuppressWarnings("unchecked")
+        T[] values = (T[]) new Object[n];
 
         int leftIndex = left;
 
@@ -81,8 +84,7 @@ public class Answer {
         }
 
         for (index = 0; index < n; index++)
-            //noinspection unchecked
-            array[left + index] = (T) values[index];
+            array[left + index] = values[index];
     }
 
     public static void main(String[] args) {
